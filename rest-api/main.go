@@ -10,10 +10,11 @@ import (
 )
 
 func main() {
+
 	// mock data for testing
-	fmt.Println("Checking works")
+
 	m.Folders = append(m.Folders, m.Folder{ID: "1", Name: "Secuity Notes", Notes: "Testing 124"})
-	m.Folders = append(m.Folders, m.Folder{ID: "2", Name: "Computer Architecture", Notes: "TTesting 456"})
+	m.Folders = append(m.Folders, m.Folder{ID: "2", Name: "Computer Architecture", Notes: "Testing 456"})
 
 	router := mux.NewRouter()
 
@@ -27,5 +28,7 @@ func main() {
 	router.HandleFunc("/folders/{id}", api.DeleteFolder).Methods("DELETE")
 
 	// Run server
-	http.ListenAndServe(":8000", router)
+	port := ":8010"
+	fmt.Println("Started Server on port", port)
+	http.ListenAndServe(port, router)
 }
