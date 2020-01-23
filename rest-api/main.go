@@ -12,9 +12,8 @@ import (
 func main() {
 
 	// mock data for testing
-
-	m.Folders = append(m.Folders, m.Folder{ID: "1", Name: "Secuity Notes", Notes: "Testing 124"})
-	m.Folders = append(m.Folders, m.Folder{ID: "2", Name: "Computer Architecture", Notes: "Testing 456"})
+	m.Folders = append(m.Folders, m.Folder{ID: "1", Name: "Security Notes", Notes: "Testing 123 ABC"})
+	m.Folders = append(m.Folders, m.Folder{ID: "2", Name: "Computer Architecture", Notes: "Testing 124"})
 
 	router := mux.NewRouter()
 
@@ -30,5 +29,9 @@ func main() {
 	// Run server
 	port := ":8010"
 	fmt.Println("Started Server on port", port)
-	http.ListenAndServe(port, router)
+	//http.ListenAndServe(port, router)
+	http.ListenAndServeTLS(":8010", "https-server.crt", "https-server.key", router)
+
+	//certmagic.HTTPS([]string{"localhost:8010"}, router)
+
 }
