@@ -12,13 +12,26 @@ import (
 
 // GetFolders : returns all folders
 func GetFolders(w http.ResponseWriter, r *http.Request) {
+
 	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE, PUT")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With")
+	w.Header().Set("preflightContinue", "true")
 	json.NewEncoder(w).Encode(m.Folders)
+
 }
 
 // GetFolder : returns folder by id
 func GetFolder(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE, PUT")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With")
+	if r.Method == "OPTIONS" {
+		w.WriteHeader(http.StatusOK)
+		return
+	}
 	params := mux.Vars(r)
 	for _, item := range m.Folders {
 		if item.ID == params["id"] {
@@ -33,6 +46,13 @@ func GetFolder(w http.ResponseWriter, r *http.Request) {
 // CreateFolder : creates and returns folder
 func CreateFolder(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE, PUT")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With")
+	if r.Method == "OPTIONS" {
+		w.WriteHeader(http.StatusOK)
+		return
+	}
 	var folder m.Folder
 	_ = json.NewDecoder(r.Body).Decode(folder)
 	folder.ID = strconv.Itoa(rand.Intn(1000000))
@@ -43,6 +63,13 @@ func CreateFolder(w http.ResponseWriter, r *http.Request) {
 // UpdateFolderName : creates and returns folder
 func UpdateFolderName(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE, PUT")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With")
+	if r.Method == "OPTIONS" {
+		w.WriteHeader(http.StatusOK)
+		return
+	}
 	params := mux.Vars(r)
 	for index, item := range m.Folders {
 		if item.ID == params["id"] {
@@ -61,6 +88,13 @@ func UpdateFolderName(w http.ResponseWriter, r *http.Request) {
 // DeleteFolder : creates and returns folder
 func DeleteFolder(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE, PUT")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With")
+	if r.Method == "OPTIONS" {
+		w.WriteHeader(http.StatusOK)
+		return
+	}
 	params := mux.Vars(r)
 	for index, item := range m.Folders {
 		if item.ID == params["id"] {
