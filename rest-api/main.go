@@ -35,25 +35,23 @@ func main() {
 	// Run server
 	port := ":8011"
 	fmt.Println("Started Server on port", port)
-	//http.ListenAndServe(port, router)
 	http.ListenAndServeTLS(":8011", "localhost.crt", "localhost.key", &CORSRouterDecorator{router})
-
-	//certmagic.HTTPS([]string{"localhost:8010"}, router)
 
 }
 
-// ServeHTTP wraps the HTTP server enabling CORS headers.
-// For more info about CORS, visit https://www.w3.org/TR/cors/
+// ServeHTTP:
+// 1 wraps the HTTP server enabling CORS headers for preflight requests
+// 2 Wraps the HTTP server header for response to front end for regular requests
 func (c *CORSRouterDecorator) ServeHTTP(rw http.ResponseWriter, req *http.Request) {
 	if origin := req.Header.Get("Origin"); origin != "" {
 		rw.Header().Set("Access-Control-Allow-Origin", origin)
 		rw.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
 		rw.Header().Set("Access-Control-Allow-Headers", "Accept, Accept-Language, Content-Type, YourOwnHeader")
+		rw.Header().Set("TESTINGGGGGG", "I'm here!!")
 	}
 	// Stop here if its Preflighted OPTIONS request
 	if req.Method == "OPTIONS" {
 		return
 	}
-
 	c.R.ServeHTTP(rw, req)
 }
