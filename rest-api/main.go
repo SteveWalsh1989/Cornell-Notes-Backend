@@ -4,13 +4,14 @@ import (
 	"FYP_Proto_Backend/api"
 	m "FYP_Proto_Backend/model"
 	"fmt"
+	"log"
 	"net/http"
 
 	// "github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 )
 
-// CORSRouterDecorator applies CORS headers to a mux.Router
+// CORSRouterDecorator applies CORS headers to  mux.Router
 type CORSRouterDecorator struct {
 	R *mux.Router
 }
@@ -53,5 +54,7 @@ func (c *CORSRouterDecorator) ServeHTTP(rw http.ResponseWriter, req *http.Reques
 	if req.Method == "OPTIONS" {
 		return
 	}
+	// TEST: log url and request type
+	log.Println("--Log: ", req.Method, " Request:  ", req.URL.Path)
 	c.R.ServeHTTP(rw, req)
 }
