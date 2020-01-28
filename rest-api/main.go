@@ -3,7 +3,9 @@ package main
 import (
 	"FYP_Proto_Backend/api"
 	m "FYP_Proto_Backend/model"
+	"database/sql"
 	"fmt"
+	_ "github.com/go-sql-driver/mysql"
 	"log"
 	"net/http"
 
@@ -16,7 +18,16 @@ type CORSRouterDecorator struct {
 	R *mux.Router
 }
 
+var db *sql.DB
+var err error
+
 func main() {
+	// Test database
+	db, err = sql.Open("mysql", "root:Ilikefood1@tcp(localhost:3306)/sys")
+	check(err)
+	defer db.Close()
+	err = db.Ping()
+	check(err)
 
 	// mock data for testing
 	m.Folders = append(m.Folders, m.Folder{ID: "1", Name: "Security Notes", Notes: "Testing 123 ABC"})
@@ -57,4 +68,11 @@ func (c *CORSRouterDecorator) ServeHTTP(rw http.ResponseWriter, req *http.Reques
 	// TEST: log url and request type
 	log.Println("--Log: ", req.Method, " Request:  ", req.URL.Path)
 	c.R.ServeHTTP(rw, req)
+}
+
+// Checks for non nil errors and prints
+func check(err error) {
+	if err != nil {
+		fmt.Println(err)
+	}
 }
