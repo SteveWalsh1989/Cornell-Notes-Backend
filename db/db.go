@@ -9,8 +9,8 @@ import (
 
 var ctx context.Context
 var dbCommands = map[string]string{
-	"createUser": "CREATE TABLE user (name VARCHAR(20));",
-	"insertUser": "INSERT INTO user (name) VALUES('steve');",
+	// "createUser": "CREATE TABLE user (name VARCHAR(20));",
+	"insertUser": "INSERT INTO user (name) VALUES('mikes');",
 }
 
 func CreateConn() *sql.DB {
@@ -27,27 +27,23 @@ func CreateConn() *sql.DB {
 
 func CloseConn(db *sql.DB) {
 	db.Close()
+	fmt.Println("Disconnected from db")
+
 }
 
 func CreateTables(db *sql.DB) {
 	fmt.Println("dbCommands: ", dbCommands)
 
-	for k, v := range dbCommands {
-		fmt.Println("Key: ", k)
-		fmt.Println("Value: ", v)
-
-		stmt, err := db.Prepare(v)
+	for _, v := range dbCommands {
+		insert, err := db.Query(v)
 		check(err)
-		defer stmt.Close()
-
-		r, err := stmt.Exec()
-		check(err)
-
-		n, err := r.RowsAffected()
-		check(err)
-
-		fmt.Println("Command:", k, ",Rows", n)
-
+		defer insert.Close()
+		// could alsp use 'db.Prepare(v)' along with the follwoing to get more info from rows
+		// r, err := insert.Exec()
+		// check(err)
+		// n, err := r.RowsAffected()
+		// check(err)
+		fmt.Println("Command send successfully")
 	}
 
 }
@@ -59,21 +55,17 @@ func GetFolder(db *sql.DB) {
 		log.Fatal(err)
 	}
 	for rows.Next() {
-		fmt.Println("Reached 5")
-
 		err := rows.Scan(&name)
 		if err != nil {
-			fmt.Println("Error")
 			log.Fatal(err)
 		}
-
+		// DO shit here to assign values
 		fmt.Println("Name: ", name)
 	}
 	err = rows.Err()
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Println("Reached End")
 
 }
 

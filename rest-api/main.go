@@ -24,7 +24,7 @@ func main() {
 	db := database.CreateConn() // create db connection
 	database.CreateTables(db)
 	database.GetFolder(db) // send query
-	//database.CloseConn(db)      // close connection
+	database.CloseConn(db) // close connection
 
 	// mock data for testing
 	m.Folders = append(m.Folders, m.Folder{ID: "1", Name: "Security Notes", Notes: "Testing 123 ABC"})
