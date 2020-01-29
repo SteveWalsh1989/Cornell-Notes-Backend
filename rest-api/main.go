@@ -2,12 +2,13 @@ package main
 
 import (
 	"FYP_Proto_Backend/api"
+	database "FYP_Proto_Backend/db"
 	m "FYP_Proto_Backend/model"
-	"database/sql"
 	"fmt"
-	_ "github.com/go-sql-driver/mysql"
 	"log"
 	"net/http"
+
+	_ "github.com/go-sql-driver/mysql"
 
 	// "github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
@@ -18,16 +19,11 @@ type CORSRouterDecorator struct {
 	R *mux.Router
 }
 
-var db *sql.DB
-var err error
-
 func main() {
 	// Test database
-	db, err = sql.Open("mysql", "root:Ilikefood1@tcp(localhost:3306)/sys")
-	check(err)
-	defer db.Close()
-	err = db.Ping()
-	check(err)
+	db := database.CreateConn() // create db connection
+	database.GetFolder(db)      // send query
+	//database.CloseConn(db)      // close connection
 
 	// mock data for testing
 	m.Folders = append(m.Folders, m.Folder{ID: "1", Name: "Security Notes", Notes: "Testing 123 ABC"})
