@@ -8,8 +8,9 @@ import (
 )
 
 var ctx context.Context
-var tables = map[string]string{
-	"Customer": "CREATE TABLE customer (name VARCHAR(20));",
+var dbCommands = map[string]string{
+	"createUser": "CREATE TABLE user (name VARCHAR(20));",
+	"insertUser": "INSERT INTO user (name) VALUES('steve');",
 }
 
 func CreateConn() *sql.DB {
@@ -19,6 +20,8 @@ func CreateConn() *sql.DB {
 	err = db.Ping()
 	check(err)
 
+	fmt.Println("Connected to db")
+
 	return db
 }
 
@@ -27,9 +30,9 @@ func CloseConn(db *sql.DB) {
 }
 
 func CreateTables(db *sql.DB) {
-	fmt.Println("table: ", tables)
+	fmt.Println("dbCommands: ", dbCommands)
 
-	for k, v := range tables {
+	for k, v := range dbCommands {
 		fmt.Println("Key: ", k)
 		fmt.Println("Value: ", v)
 
@@ -43,35 +46,28 @@ func CreateTables(db *sql.DB) {
 		n, err := r.RowsAffected()
 		check(err)
 
-		fmt.Println("CREATED TABLE:", k, ",Rows", n)
+		fmt.Println("Command:", k, ",Rows", n)
 
 	}
 
 }
 
 func GetFolder(db *sql.DB) {
-	fmt.Println("Reached 1")
-	var (
-		id   int
-		name string
-	)
-	rows, err := db.Query("select * from Folder;")
-	fmt.Println("Reached 2")
-
+	var name string
+	rows, err := db.Query("SELECT * FROM user")
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Println("Reached 3")
-
-	defer rows.Close()
-	fmt.Println("Reached 4")
-
 	for rows.Next() {
-		err := rows.Scan(&id, &name)
+		fmt.Println("Reached 5")
+
+		err := rows.Scan(&name)
 		if err != nil {
+			fmt.Println("Error")
 			log.Fatal(err)
 		}
-		fmt.Println(id, name)
+
+		fmt.Println("Name: ", name)
 	}
 	err = rows.Err()
 	if err != nil {

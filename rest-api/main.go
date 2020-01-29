@@ -22,7 +22,8 @@ type CORSRouterDecorator struct {
 func main() {
 	// Test database
 	db := database.CreateConn() // create db connection
-	database.GetFolder(db)      // send query
+	database.CreateTables(db)
+	database.GetFolder(db) // send query
 	//database.CloseConn(db)      // close connection
 
 	// mock data for testing
