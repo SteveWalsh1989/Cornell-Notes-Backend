@@ -30,14 +30,14 @@ func CreateConn() *sql.DB {
 	Check(err)
 	err = db.Ping()
 	Check(err)
-	LogDBConn("DB Connected")
+	//LogDBConn("DB Connected")
 	return db
 }
 
 //CloseConn ... closes the database connection
 func CloseConn(db *sql.DB) {
 	db.Close()
-	LogDBConn("DB Disconnected")
+	//LogDBConn("DB Disconnected")
 
 }
 
