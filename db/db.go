@@ -27,7 +27,7 @@ func SetupDB() {
 //CreateConn ... crates connection with database -returns pointer to db
 func CreateConn() *sql.DB {
 	// Test database
-	db, err := sql.Open("mysql", "root:Ilikefood1@tcp(localhost:3306)/sys")
+	db, err := sql.Open("mysql", "root:Ilikefood1@tcp(localhost:3306)/sys?parseTime=true")
 	Check(err)
 	err = db.Ping()
 	Check(err)
