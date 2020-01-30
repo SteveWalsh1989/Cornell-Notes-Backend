@@ -41,6 +41,13 @@ func CloseConn(db *sql.DB) {
 
 }
 
+/*
+The following three functions are only ran once when starting program:
+	- Drop all existing tables in DB
+	- Initalise the DB with required tables for app
+	- Insert sample data into DB for testing
+*/
+
 //CreateTables ... create tables in db
 func createTables(db *sql.DB) {
 	LogTitle("Creating DB")
