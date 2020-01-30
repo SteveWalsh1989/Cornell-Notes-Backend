@@ -1,14 +1,14 @@
 package db
 
 /*
- Commands:
+ db_setup:
  --------------------------------------------
  file contains Maps containing SQL commands to create
  tables and insert sample data into the application
 */
 
 //CreateTableCommands ... stores all create table commands needed for application - 20 tables
-var CreateTableCommands = map[string]string{
+var CreateTables = map[string]string{
 	"badges":        "CREATE TABLE badges (id VARCHAR(36) NOT NULL  PRIMARY KEY, name VARCHAR(36), item_id VARCHAR(36), item_type VARCHAR(10), status VARCHAR(10), date_created datetime, date_edited datetime);",
 	"badge_users":   "CREATE TABLE badge_users (badge_id VARCHAR(36) NOT NULL, user_id VARCHAR(36) NOT NULL, PRIMARY KEY(badge_id, user_id));",
 	"badge_scores":  "CREATE TABLE badge_scores (user_id VARCHAR(36) NOT NULL PRIMARY KEY, notes_created integer, cornell_notes_created integer,reviews_created integer,notes_shared integer, cornell_notes_shared integer,reviews_shared integer, reviews_completed integer);",
@@ -31,7 +31,7 @@ var CreateTableCommands = map[string]string{
 	"users":         "CREATE TABLE users (id VARCHAR(36) NOT NULL PRIMARY KEY, first_name VARCHAR(36), last_name VARCHAR(36), password VARCHAR(10), status VARCHAR(10) DEFAULT 'Active', date_created datetime, date_edited datetime) ;"}
 
 //InsertSampleDataCommands ... inserts sample data into DB
-var InsertSampleDataCommands = map[string]string{
+var InsertSampleData = map[string]string{
 	"User 1":        "INSERT INTO users (id, first_name, last_name, password) VALUES('123332', 'Steve', 'Walsh', 'password');",
 	"User 2":        "INSERT INTO users (id, first_name, last_name, password) VALUES('123343', 'Emma', 'Johnson', 'password');",
 	"User 3":        "INSERT INTO users (id, first_name, last_name, password) VALUES('123449', 'Ted', 'Bundy', 'password');",

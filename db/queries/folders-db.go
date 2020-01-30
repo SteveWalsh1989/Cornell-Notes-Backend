@@ -3,8 +3,12 @@ package queries
 import (
 	"FYP_Proto_Backend/db"
 	m "FYP_Proto_Backend/model"
+	"context"
 	"fmt"
+	"time"
 )
+
+var ctx context.Context
 
 //GetFolder ... using folder ID returns folder from db as Folder struct
 func GetFolder(id string) m.Folder {
@@ -53,4 +57,36 @@ func GetFolders() []m.Folder {
 
 	db.CloseConn(conn)
 	return folders
+}
+
+//UpdateFolderName ... Updates name of folder
+func UpdateFolderName(name string) {
+	conn := db.CreateConn()
+
+	// test
+	userID := 123332
+
+	result, err := conn.ExecContext(ctx, "UPDATE folder SET name = ?  WHERE user_id = ?", name, userID)
+	db.Check(err)
+
+	rows, err := result.RowsAffected()
+	db.Check(err)
+
+	if rows != 1 {
+		fmt.Printf("expected to affect 1 row, affected %d \n", rows)
+	}
+
+	db.CloseConn(conn)
+
+}
+
+//DeleteFolder ... Updates folder status for 'deleted'
+func DeleteFolder(folderID string) {
+	conn := db.CreateConn()
+
+	time := time.Now() // current time for time_edited
+	_, err := conn.Exec("UPDATE FOLDER SET status='Deleted, date_edited=$2  WHERE id=$1", folderID, time)
+	db.Check(err)
+	db.CloseConn(conn)
+
 }

@@ -3,9 +3,8 @@ package api
 import (
 	q "FYP_Proto_Backend/db/queries"
 	m "FYP_Proto_Backend/model"
-	"fmt"
-
 	"encoding/json"
+	"fmt"
 	"math/rand"
 	"net/http"
 	"strconv"
@@ -50,38 +49,20 @@ func CreateFolder(w http.ResponseWriter, r *http.Request) {
 
 // UpdateFolderName : creates and returns folder
 func UpdateFolderName(w http.ResponseWriter, r *http.Request) {
-	if r.Method == "OPTIONS" {
-		w.WriteHeader(http.StatusOK)
-		return
-	}
+
 	params := mux.Vars(r)
-	for index, item := range m.Folders {
-		if item.ID == params["id"] {
-			m.Folders = append(m.Folders[:index], m.Folders[index+1:]...)
-			var folder m.Folder
-			_ = json.NewDecoder(r.Body).Decode(folder)
-			folder.ID = params["id"]
-			m.Folders = append(m.Folders, folder)
-			json.NewEncoder(w).Encode(&folder)
-			return
-		}
-	}
-	json.NewEncoder(w).Encode(m.Folders)
+	// params["id"]
+	q.UpdateFolderName(params["Name"])
+
+	json.NewEncoder(w).Encode(params["Name"])
 }
 
 // DeleteFolder : creates and returns folder
 func DeleteFolder(w http.ResponseWriter, r *http.Request) {
 
-	if r.Method == "OPTIONS" {
-		w.WriteHeader(http.StatusOK)
-		return
-	}
 	params := mux.Vars(r)
-	for index, item := range m.Folders {
-		if item.ID == params["id"] {
-			m.Folders = append(m.Folders[:index], m.Folders[index+1:]...)
-			break
-		}
-	}
+
+	q.DeleteFolder(params["ID"])
+
 	json.NewEncoder(w).Encode(m.Folders)
 }

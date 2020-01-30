@@ -6,7 +6,7 @@ import (
 	"github.com/gorilla/mux"
 )
 
-// ServeRoutes .. handles API Routes  
+// ServeRoutes .. handles API Routes
 func ServeRoutes(router *mux.Router) {
 
 	/*
@@ -16,6 +16,6 @@ func ServeRoutes(router *mux.Router) {
 	router.HandleFunc("/folder", api.CreateFolder).Methods("POST", "OPTIONS")
 	router.HandleFunc("/folders/", api.GetFolders).Methods("GET", "OPTIONS")
 	router.HandleFunc("/folder/{id}", api.GetFolder).Methods("GET", "OPTIONS")
-	router.HandleFunc("/folders/{id}", api.UpdateFolderName).Methods("PUT", "OPTIONS")
-	router.HandleFunc("/folders/{id}", api.DeleteFolder).Methods("DELETE", "OPTIONS")
+	router.HandleFunc("/folders/{name}", api.UpdateFolderName).Methods("PUT", "OPTIONS")
+	router.HandleFunc("/folder/{id}", api.DeleteFolder).Methods("DELETE", "OPTIONS")
 }

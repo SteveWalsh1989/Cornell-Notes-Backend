@@ -51,8 +51,8 @@ The following three functions are only ran once when starting program:
 //CreateTables ... create tables in db
 func createTables(db *sql.DB) {
 	LogTitle("Creating DB")
-	numCreated := 0
-	for k, v := range CreateTableCommands {
+	numCreated := 1
+	for k, v := range CreateTables {
 		insert, err := db.Query(v)
 		Check(err)
 		defer insert.Close()
@@ -61,17 +61,15 @@ func createTables(db *sql.DB) {
 		// check(err)
 		// n, err := r.RowsAffected()
 		// check(err)
-		fmt.Println("-- Table Created: ", k)
+		fmt.Printf("-- %v Table Created: %v \n", numCreated, k)
 		numCreated++
 	}
-
-	fmt.Println("-- Tables Created:", numCreated)
 
 }
 
 //dropTables .. for dev purposes only
 func dropTables(db *sql.DB) {
-	for k := range CreateTableCommands {
+	for k := range CreateTables {
 		query := "DROP TABLE " + k
 		res, err := db.Query(query)
 		Check(err)
@@ -83,7 +81,7 @@ func dropTables(db *sql.DB) {
 
 //AddSampleData ... insert sample data to db
 func addSampleData(db *sql.DB) {
-	for _, v := range InsertSampleDataCommands {
+	for _, v := range InsertSampleData {
 		insert, err := db.Query(v)
 		Check(err)
 		defer insert.Close()
