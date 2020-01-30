@@ -1,10 +1,19 @@
 package models
 
+import (
+	"time"
+)
+
 // Folder : Sample struct for folder to test router
 type Folder struct {
-	ID    string `json:"id"`
-	Name  string `json:"title"`
-	Notes string `json:"body"`
+	ID          string    `json:"ID"`
+	Name        string    `json:"Name"`
+	ItemID      string    `json:"ItemID"`
+	ItemType    string    `json:"ItemType"`
+	Status      string    `json:"Status"`
+	DateCreated time.Time `json:"DateCreated"`
+	DateEdited  time.Time `json:"DateEdited"`
+	DateDeleted time.Time `json:"DateDeleted"`
 }
 
 // Folders : list of folders

@@ -2,7 +2,7 @@ package main
 
 import (
 	"FYP_Proto_Backend/api"
-	database "FYP_Proto_Backend/db"
+	"FYP_Proto_Backend/db"
 	m "FYP_Proto_Backend/model"
 	"fmt"
 	"log"
@@ -10,25 +10,21 @@ import (
 
 	_ "github.com/go-sql-driver/mysql"
 
-	// "github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 )
 
-// CORSRouterDecorator applies CORS headers to  mux.Router
+// CORSRouterDecorator applies CORS headers to mux.Router
 type CORSRouterDecorator struct {
 	R *mux.Router
 }
 
 func main() {
-	// Test database
-	db := database.CreateConn() // create db connection
-	database.CreateTables(db)
-	database.GetFolder(db) // send query
-	database.CloseConn(db) // close connection
+	// Initialise database
+	db.SetupDB()
 
 	// mock data for testing
-	m.Folders = append(m.Folders, m.Folder{ID: "1", Name: "Security Notes", Notes: "Testing 123 ABC"})
-	m.Folders = append(m.Folders, m.Folder{ID: "2", Name: "Computer Architecture", Notes: "Testing 124"})
+	m.Folders = append(m.Folders, m.Folder{ID: "11", Name: "Microservices", Status: "Active"})
+	m.Folders = append(m.Folders, m.Folder{ID: "22", Name: "Computer Architecture", Status: "Active"})
 
 	router := mux.NewRouter()
 
@@ -37,7 +33,7 @@ func main() {
 	 */
 	router.HandleFunc("/folders", api.GetFolders).Methods("GET", "OPTIONS")
 	router.HandleFunc("/folder", api.CreateFolder).Methods("POST", "OPTIONS")
-	router.HandleFunc("/folders/{id}", api.GetFolder).Methods("GET", "OPTIONS")
+	router.HandleFunc("/folder/", api.GetFolder).Methods("GET", "OPTIONS")
 	router.HandleFunc("/folders/{id}", api.UpdateFolderName).Methods("PUT", "OPTIONS")
 	router.HandleFunc("/folders/{id}", api.DeleteFolder).Methods("DELETE", "OPTIONS")
 

@@ -1,7 +1,10 @@
 package api
 
 import (
+	db "FYP_Proto_Backend/db"
 	m "FYP_Proto_Backend/model"
+	"fmt"
+
 	"encoding/json"
 	"math/rand"
 	"net/http"
@@ -19,14 +22,13 @@ func GetFolders(w http.ResponseWriter, r *http.Request) {
 // GetFolder : returns folder by id
 func GetFolder(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
-	for _, item := range m.Folders {
-		if item.ID == params["id"] {
-			json.NewEncoder(w).Encode(item)
-			break
-		}
-		return
-	}
-	json.NewEncoder(w).Encode(&m.Folder{})
+
+	var folder m.Folder
+	folder = db.GetFolder(params["ID"])
+
+	fmt.Println("GetFolder: folder name: ", folder.Name)
+
+	json.NewEncoder(w).Encode(folder)
 }
 
 // CreateFolder : creates and returns folder
@@ -34,6 +36,7 @@ func CreateFolder(w http.ResponseWriter, r *http.Request) {
 
 	var folder m.Folder
 	_ = json.NewDecoder(r.Body).Decode(folder)
+
 	folder.ID = strconv.Itoa(rand.Intn(1000000))
 	//folder.Name = r.Body.
 	m.Folders = append(m.Folders, folder)
