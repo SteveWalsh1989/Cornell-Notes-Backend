@@ -49,9 +49,16 @@ func CreateFolder(w http.ResponseWriter, r *http.Request) {
 
 // UpdateFolderName : creates and returns folder
 func UpdateFolderName(w http.ResponseWriter, r *http.Request) {
-
 	params := mux.Vars(r)
-	// params["id"]
+
+	// Check params arent empty
+	if (params["id"] != "") && (params["name"] != "") {
+
+		w.WriteHeader(422) // set HTTP response to bad entity
+		json.NewEncoder(w).Encode("Missing Parameters")
+		return
+	}
+
 	q.UpdateFolderName(params["id"], params["name"])
 
 	json.NewEncoder(w).Encode(params["name"])

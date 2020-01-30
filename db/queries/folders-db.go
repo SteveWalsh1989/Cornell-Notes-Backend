@@ -61,11 +61,8 @@ func GetFolders() []m.Folder {
 }
 
 //UpdateFolderName ... Updates name of folder
-func UpdateFolderName(name string, id string) {
+func UpdateFolderName(id string, name string) {
 	conn := db.CreateConn()
-
-	fmt.Println("UpdateFolderName: name ", name)
-	fmt.Println("UpdateFolderName: id ", id)
 
 	stmt, err := conn.Prepare("UPDATE folders SET name = ? WHERE id = ?")
 	db.Check(err)
