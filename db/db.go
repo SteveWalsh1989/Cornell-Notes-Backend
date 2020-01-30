@@ -15,8 +15,8 @@ func SetupDB() {
 	db := CreateConn()
 
 	//dropTables(db)    // drop previous tables
-	createTables(db)  // create new tables
-	addSampleData(db) // insert sample data
+	createTables(db) // create new tables
+	//addSampleData(db) // insert sample data
 
 	CloseConn(db)
 
@@ -44,8 +44,8 @@ func CloseConn(db *sql.DB) {
 
 //CreateTables ... create tables in db
 func createTables(db *sql.DB) {
-
-	for _, v := range CreateTableCommands {
+	numCreated := 0
+	for k, v := range CreateTableCommands {
 		insert, err := db.Query(v)
 		check(err)
 		defer insert.Close()
@@ -54,8 +54,11 @@ func createTables(db *sql.DB) {
 		// check(err)
 		// n, err := r.RowsAffected()
 		// check(err)
-		fmt.Println("-- Tables Created")
+		fmt.Println("-- Table Created: ", k)
+		numCreated++
 	}
+	fmt.Println("-- Tables Created:", numCreated)
+
 }
 
 //dropTables .. for dev purposes only
