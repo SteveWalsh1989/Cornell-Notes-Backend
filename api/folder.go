@@ -1,7 +1,7 @@
 package api
 
 import (
-	db "FYP_Proto_Backend/db"
+	q "FYP_Proto_Backend/db/queries"
 	m "FYP_Proto_Backend/model"
 	"fmt"
 
@@ -16,9 +16,9 @@ import (
 // GetFolders : returns all folders
 func GetFolders(w http.ResponseWriter, r *http.Request) {
 	var folders []m.Folder
-	folders = db.GetFolders()
+	folders = q.GetFolders()
 
-	fmt.Println("GetFolders: ", folders)
+	// fmt.Println("GetFolders: ", folders) // testing
 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(folders)
@@ -29,10 +29,9 @@ func GetFolder(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 
 	var folder m.Folder
-	folder = db.GetFolder(params["ID"])
+	folder = q.GetFolder(params["ID"])
 
 	fmt.Println("GetFolder: folder name: ", folder.Name)
-
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(folder)
 }

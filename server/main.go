@@ -3,7 +3,6 @@ package main
 import (
 	"FYP_Proto_Backend/api"
 	"FYP_Proto_Backend/db"
-	"log"
 	"net/http"
 
 	_ "github.com/go-sql-driver/mysql"
@@ -53,6 +52,7 @@ func (c *CORSRouterDecorator) ServeHTTP(rw http.ResponseWriter, req *http.Reques
 		return
 	}
 	// TEST: log url and request type
-	log.Println("--Log: ", req.Method, " Request:  ", req.URL.Path)
+	db.LogRequest(req.Method, req.URL.Path)
+
 	c.R.ServeHTTP(rw, req)
 }

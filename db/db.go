@@ -1,7 +1,6 @@
 package db
 
 import (
-	m "FYP_Proto_Backend/model"
 	"context"
 	"database/sql"
 	"fmt"
@@ -83,50 +82,4 @@ func addSampleData(db *sql.DB) {
 		defer insert.Close()
 	}
 	LogTitle("Sample Data added to DB")
-}
-
-//GetFolder ... using folder ID returns folder from db as Folder struct
-func GetFolder(id string) m.Folder {
-	db := CreateConn()
-	var folder m.Folder
-
-	rows, err := db.Query("SELECT * FROM Folders WHERE id=?", id)
-	Check(err)
-	for rows.Next() {
-		if err := rows.Scan(&folder.Name, &folder.ID, &folder.Status,
-			&folder.DateCreated, &folder.DateEdited); err != nil {
-			// Check for a scan error.
-			// Query rows will be closed with defer.
-			fmt.Println("Error", err)
-		}
-		//fmt.Println("folder: ", folder.Name)
-	}
-	err = rows.Err()
-	Check(err)
-
-	return folder
-}
-
-//GetFolders ... using folder ID returns folder from db as Folder struct
-func GetFolders() []m.Folder {
-	db := CreateConn()
-	var folder m.Folder
-	var folders = []m.Folder{}
-
-	rows, err := db.Query("SELECT * FROM Folders")
-	Check(err)
-
-	for rows.Next() {
-		if err := rows.Scan(&folder.ID, &folder.Name, &folder.Status,
-			&folder.DateCreated, &folder.DateEdited); err != nil {
-			// Check for a scan error.
-			// Query rows will be closed with defer.
-			fmt.Println("Error: ", err)
-		}
-		// fmt.Println("folder: ", folder.Name)
-		folders = append(folders, folder)
-	}
-	err = rows.Err()
-	Check(err)
-	return folders
 }
