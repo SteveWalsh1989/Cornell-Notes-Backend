@@ -15,8 +15,13 @@ import (
 
 // GetFolders : returns all folders
 func GetFolders(w http.ResponseWriter, r *http.Request) {
-	json.NewEncoder(w).Encode(m.Folders)
+	var folders []m.Folder
+	folders = db.GetFolders()
 
+	fmt.Println("GetFolders: ", folders)
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(folders)
 }
 
 // GetFolder : returns folder by id
@@ -28,6 +33,7 @@ func GetFolder(w http.ResponseWriter, r *http.Request) {
 
 	fmt.Println("GetFolder: folder name: ", folder.Name)
 
+	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(folder)
 }
 

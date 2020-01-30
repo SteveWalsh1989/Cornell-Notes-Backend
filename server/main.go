@@ -3,8 +3,6 @@ package main
 import (
 	"FYP_Proto_Backend/api"
 	"FYP_Proto_Backend/db"
-	m "FYP_Proto_Backend/model"
-	"fmt"
 	"log"
 	"net/http"
 
@@ -18,30 +16,26 @@ type CORSRouterDecorator struct {
 	R *mux.Router
 }
 
+var port = ":8011" //  port number for server
+
 func main() {
-	// Initialise database
-	db.SetupDB()
 
-	// mock data for testing
-	m.Folders = append(m.Folders, m.Folder{ID: "11", Name: "Microservices", Status: "Active"})
-	m.Folders = append(m.Folders, m.Folder{ID: "22", Name: "Computer Architecture", Status: "Active"})
-
-	router := mux.NewRouter()
+	db.SetupDB()              // Initialise database
+	router := mux.NewRouter() // create router
 
 	/*
 	 * FOLDERS
 	 */
 	router.HandleFunc("/folders", api.GetFolders).Methods("GET", "OPTIONS")
 	router.HandleFunc("/folder", api.CreateFolder).Methods("POST", "OPTIONS")
-	router.HandleFunc("/folder/", api.GetFolder).Methods("GET", "OPTIONS")
+	router.HandleFunc("/folders/", api.GetFolders).Methods("GET", "OPTIONS")
+	router.HandleFunc("/folder/{id}", api.GetFolder).Methods("GET", "OPTIONS")
 	router.HandleFunc("/folders/{id}", api.UpdateFolderName).Methods("PUT", "OPTIONS")
 	router.HandleFunc("/folders/{id}", api.DeleteFolder).Methods("DELETE", "OPTIONS")
 
 	// Run server
-	port := ":8011"
-	fmt.Println("Started Server on port", port)
-	http.ListenAndServeTLS(":8011", "localhost.crt", "localhost.key", &CORSRouterDecorator{router})
-
+	db.LogValue("Started Server on port", port)
+	http.ListenAndServeTLS(port, "localhost.crt", "localhost.key", &CORSRouterDecorator{router})
 }
 
 // ServeHTTP:
@@ -61,11 +55,4 @@ func (c *CORSRouterDecorator) ServeHTTP(rw http.ResponseWriter, req *http.Reques
 	// TEST: log url and request type
 	log.Println("--Log: ", req.Method, " Request:  ", req.URL.Path)
 	c.R.ServeHTTP(rw, req)
-}
-
-// Checks for non nil errors and prints
-func check(err error) {
-	if err != nil {
-		fmt.Println(err)
-	}
 }

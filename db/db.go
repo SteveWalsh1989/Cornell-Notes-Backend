@@ -5,24 +5,22 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
-	"log"
 )
 
 var ctx context.Context
-var sp = "\n//----------------------//\n   "
 
 //SetupDB ... creates db tables and enters sample data
 func SetupDB() {
-	fmt.Println(sp + "Setting Up Database" + sp)
+	LogTitle("Setting up Database")
 
 	db := CreateConn()
 
-	dropTables(db)   // drop previous tables
-	createTables(db) // create new tables
-	//addSampleData(db) // insert sample data
+	dropTables(db)    // drop previous tables
+	createTables(db)  // create new tables
+	addSampleData(db) // insert sample data
 
 	CloseConn(db)
-	fmt.Println(sp + "Setup Complete" + sp)
+	LogTitle("Setup Complete")
 
 }
 
@@ -30,26 +28,27 @@ func SetupDB() {
 func CreateConn() *sql.DB {
 	// Test database
 	db, err := sql.Open("mysql", "root:Ilikefood1@tcp(localhost:3306)/sys")
-	check(err)
+	Check(err)
 	err = db.Ping()
-	check(err)
-	fmt.Println("Connected to db")
+	Check(err)
+	LogDBConn("DB Connected")
 	return db
 }
 
 //CloseConn ... closes the database connection
 func CloseConn(db *sql.DB) {
 	db.Close()
-	fmt.Println("Disconnected from db")
+	LogDBConn("DB Disconnected")
 
 }
 
 //CreateTables ... create tables in db
 func createTables(db *sql.DB) {
+	LogTitle("Creating DB")
 	numCreated := 0
 	for k, v := range CreateTableCommands {
 		insert, err := db.Query(v)
-		check(err)
+		Check(err)
 		defer insert.Close()
 		// could alsp use 'db.Prepare(v)' along with the follwoing to get more info from rows
 		// r, err := insert.Exec()
@@ -69,27 +68,21 @@ func dropTables(db *sql.DB) {
 	for k := range CreateTableCommands {
 		query := "DROP TABLE " + k
 		res, err := db.Query(query)
-		check(err)
+		Check(err)
 		defer res.Close()
 	}
-	fmt.Println("-- Old Tables Dropped")
+	LogTitle("Old Tables Dropped")
 
 }
 
 //AddSampleData ... insert sample data to db
 func addSampleData(db *sql.DB) {
-
-	for _, v := range CreateTableCommands {
+	for _, v := range InsertSampleDataCommands {
 		insert, err := db.Query(v)
-		check(err)
+		Check(err)
 		defer insert.Close()
-		// could alsp use 'db.Prepare(v)' along with the follwoing to get more info from rows
-		// r, err := insert.Exec()
-		// check(err)
-		// n, err := r.RowsAffected()
-		// check(err)
-		fmt.Println("-- Sample Data added to DB")
 	}
+	LogTitle("Sample Data added to DB")
 }
 
 //GetFolder ... using folder ID returns folder from db as Folder struct
@@ -97,41 +90,43 @@ func GetFolder(id string) m.Folder {
 	db := CreateConn()
 	var folder m.Folder
 
-	rows, err := db.Query("SELECT * FROM Folder WHERE id=?", id)
-	if err != nil {
-		fmt.Println("Error1")
-		log.Fatal(err)
-	}
-	fmt.Println("Rows: ", rows)
-
+	rows, err := db.Query("SELECT * FROM Folders WHERE id=?", id)
+	Check(err)
 	for rows.Next() {
-		fmt.Println("here")
 		if err := rows.Scan(&folder.Name, &folder.ID, &folder.Status,
-			&folder.ItemID, &folder.ItemType, &folder.DateCreated,
-			&folder.DateEdited, &folder.DateDeleted); err != nil {
+			&folder.DateCreated, &folder.DateEdited); err != nil {
 			// Check for a scan error.
 			// Query rows will be closed with defer.
-			fmt.Println("Error")
-
-			log.Fatal(err)
+			fmt.Println("Error", err)
 		}
-		fmt.Println("here1")
-
-		fmt.Println("folder: ", folder.Name)
+		//fmt.Println("folder: ", folder.Name)
 	}
-
 	err = rows.Err()
-	if err != nil {
-		log.Fatal(err)
-	}
-	fmt.Println("here2")
+	Check(err)
 
 	return folder
 }
 
-// Checks for non nil errors and prints
-func check(err error) {
-	if err != nil {
-		fmt.Println(err)
+//GetFolders ... using folder ID returns folder from db as Folder struct
+func GetFolders() []m.Folder {
+	db := CreateConn()
+	var folder m.Folder
+	var folders = []m.Folder{}
+
+	rows, err := db.Query("SELECT * FROM Folders")
+	Check(err)
+
+	for rows.Next() {
+		if err := rows.Scan(&folder.ID, &folder.Name, &folder.Status,
+			&folder.DateCreated, &folder.DateEdited); err != nil {
+			// Check for a scan error.
+			// Query rows will be closed with defer.
+			fmt.Println("Error: ", err)
+		}
+		// fmt.Println("folder: ", folder.Name)
+		folders = append(folders, folder)
 	}
+	err = rows.Err()
+	Check(err)
+	return folders
 }
