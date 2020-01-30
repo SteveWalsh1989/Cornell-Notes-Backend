@@ -4,8 +4,8 @@ import (
 	"time"
 )
 
-// Folder : Sample struct for folder to test router
-type Folder struct {
+// Badge : Sample struct for Badge to test router
+type Badge struct {
 	ID          string    `db:"id" json:"ID"`
 	Name        string    `db:"name" json:"Name"`
 	Status      string    `db:"status" json:"Status"`
@@ -14,4 +14,4 @@ type Folder struct {
 }
 
 // Folders : list of folders
-var Folders []Folder
+var Badges []Badge

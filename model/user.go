@@ -4,7 +4,7 @@ import (
 	"time"
 )
 
-// Folder : Sample struct for folder to test router
+// User : Stores user information
 type User struct {
 	ID          string    `db:"id" json:"ID"`
 	FirstName   string    `db:"first_name" json:"FirstName"`
@@ -15,5 +15,5 @@ type User struct {
 	DateEdited  time.Time `db:"date_edited" json:"DateEdited"`
 }
 
-// Folders : list of folders
+// Users : list of Users
 var Users []User

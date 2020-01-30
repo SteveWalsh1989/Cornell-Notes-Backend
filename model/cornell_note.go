@@ -5,7 +5,7 @@ import (
 )
 
 // Folder : Sample struct for folder to test router
-type Folder struct {
+type CornellNote struct {
 	ID          string    `db:"id" json:"ID"`
 	Name        string    `db:"name" json:"Name"`
 	Status      string    `db:"status" json:"Status"`
@@ -14,4 +14,4 @@ type Folder struct {
 }
 
 // Folders : list of folders
-var Folders []Folder
+var CornellNotes []CornellNote
