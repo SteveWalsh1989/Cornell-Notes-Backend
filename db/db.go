@@ -9,16 +9,20 @@ import (
 )
 
 var ctx context.Context
+var sp = "\n//----------------------//\n   "
 
 //SetupDB ... creates db tables and enters sample data
 func SetupDB() {
+	fmt.Println(sp + "Setting Up Database" + sp)
+
 	db := CreateConn()
 
-	//dropTables(db)    // drop previous tables
+	dropTables(db)   // drop previous tables
 	createTables(db) // create new tables
 	//addSampleData(db) // insert sample data
 
 	CloseConn(db)
+	fmt.Println(sp + "Setup Complete" + sp)
 
 }
 
@@ -29,9 +33,7 @@ func CreateConn() *sql.DB {
 	check(err)
 	err = db.Ping()
 	check(err)
-
 	fmt.Println("Connected to db")
-
 	return db
 }
 
@@ -57,6 +59,7 @@ func createTables(db *sql.DB) {
 		fmt.Println("-- Table Created: ", k)
 		numCreated++
 	}
+
 	fmt.Println("-- Tables Created:", numCreated)
 
 }
@@ -68,8 +71,9 @@ func dropTables(db *sql.DB) {
 		res, err := db.Query(query)
 		check(err)
 		defer res.Close()
-		fmt.Println("-- Tables Dropped")
 	}
+	fmt.Println("-- Old Tables Dropped")
+
 }
 
 //AddSampleData ... insert sample data to db
