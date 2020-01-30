@@ -11,8 +11,10 @@ func GetFolder(id string) m.Folder {
 	conn := db.CreateConn()
 	var folder m.Folder
 
-	rows, err := conn.Query("SELECT * FROM Folders WHERE id=?", id)
+	query := "SELECT * FROM Folders WHERE id=" + id
+	rows, err := conn.Query(query)
 	db.Check(err)
+
 	for rows.Next() {
 		if err := rows.Scan(&folder.Name, &folder.ID, &folder.Status,
 			&folder.DateCreated, &folder.DateEdited); err != nil {

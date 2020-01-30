@@ -1,7 +1,6 @@
 package main
 
 import (
-	"FYP_Proto_Backend/api"
 	"FYP_Proto_Backend/db"
 	"net/http"
 
@@ -19,40 +18,30 @@ var port = ":8011" //  port number for server
 
 func main() {
 
-	db.SetupDB()              // Initialise database
+	db.SetupDB()              // setup db tables and add sample data
 	router := mux.NewRouter() // create router
+	ServeRoutes(router)       // handles API Route requests
 
-	/*
-	 * FOLDERS
-	 */
-	router.HandleFunc("/folders", api.GetFolders).Methods("GET", "OPTIONS")
-	router.HandleFunc("/folder", api.CreateFolder).Methods("POST", "OPTIONS")
-	router.HandleFunc("/folders/", api.GetFolders).Methods("GET", "OPTIONS")
-	router.HandleFunc("/folder/{id}", api.GetFolder).Methods("GET", "OPTIONS")
-	router.HandleFunc("/folders/{id}", api.UpdateFolderName).Methods("PUT", "OPTIONS")
-	router.HandleFunc("/folders/{id}", api.DeleteFolder).Methods("DELETE", "OPTIONS")
-
-	// Run server
-	db.LogValue("Started Server on port", port)
-	http.ListenAndServeTLS(port, "localhost.crt", "localhost.key", &CORSRouterDecorator{router})
+	db.LogValue("Starting Server on port", port)
+	http.ListenAndServeTLS(port, "localhost.crt", "localhost.key", &CORSRouterDecorator{router}) // Run server
 }
 
 // ServeHTTP:
 // 1 wraps the HTTP server enabling CORS headers for preflight requests
 // 2 Wraps the HTTP server header for response to front end for regular requests
 func (c *CORSRouterDecorator) ServeHTTP(rw http.ResponseWriter, req *http.Request) {
+	// Add headers to request
 	if origin := req.Header.Get("Origin"); origin != "" {
 		rw.Header().Set("Access-Control-Allow-Origin", origin)
 		rw.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
 		rw.Header().Set("Access-Control-Allow-Headers", "Accept, Accept-Language, Content-Type, YourOwnHeader")
-		rw.Header().Set("TESTINGGGGGG", "I'm here!!")
+		//rw.Header().Set("TESTINGGGGGG", "I'm here!!")
 	}
-	// Stop here if its Preflighted OPTIONS request
-	if req.Method == "OPTIONS" {
+
+	if req.Method == "OPTIONS" { // Stop here if its Preflighted OPTIONS request
 		return
 	}
-	// TEST: log url and request type
-	db.LogRequest(req.Method, req.URL.Path)
+	db.LogRequest(req.Method, req.URL.Path) // TEST: log url and request type
 
-	c.R.ServeHTTP(rw, req)
+	c.R.ServeHTTP(rw, req) // Continue request
 }

@@ -8,21 +8,6 @@ import (
 
 var ctx context.Context
 
-//SetupDB ... creates db tables and enters sample data
-func SetupDB() {
-	LogTitle("Setting up Database")
-
-	db := CreateConn()
-
-	dropTables(db)    // drop previous tables
-	createTables(db)  // create new tables
-	addSampleData(db) // insert sample data
-
-	CloseConn(db)
-	LogTitle("Setup Complete")
-
-}
-
 //CreateConn ... crates connection with database -returns pointer to db
 func CreateConn() *sql.DB {
 	// Test database
@@ -38,6 +23,21 @@ func CreateConn() *sql.DB {
 func CloseConn(db *sql.DB) {
 	db.Close()
 	//LogDBConn("DB Disconnected")
+
+}
+
+//SetupDB ... creates db tables and enters sample data
+func SetupDB() {
+	LogTitle("Setting up Database")
+
+	db := CreateConn()
+
+	dropTables(db)    // drop previous tables
+	createTables(db)  // create new tables
+	addSampleData(db) // insert sample data
+
+	CloseConn(db)
+	LogTitle("Setup Complete")
 
 }
 
