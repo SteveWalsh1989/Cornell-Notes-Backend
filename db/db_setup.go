@@ -32,10 +32,10 @@ var CreateTables = map[string]string{
 
 //InsertSampleDataCommands ... inserts sample data into DB
 var InsertSampleData = map[string]string{
-	"User 1":        "INSERT INTO users (id, first_name, last_name, password) VALUES('123332', 'Steve', 'Walsh', 'password');",
-	"User 2":        "INSERT INTO users (id, first_name, last_name, password) VALUES('123343', 'Emma', 'Johnson', 'password');",
-	"User 3":        "INSERT INTO users (id, first_name, last_name, password) VALUES('123449', 'Ted', 'Bundy', 'password');",
-	"Folder 1":      "INSERT INTO folders (id, name, date_created, date_edited) VALUES('131311', 'Machine Learning', '2020-01-03', '2020-01-03');",
-	"Folder 2":      "INSERT INTO folders (id, name, date_created, date_edited) VALUES('1234439', 'Cryptography', '2020-01-03', '2020-01-03');",
-	"Folder User 1": "INSERT INTO folder_users (folder_id, user_id) VALUES('131311', '123332' );",
-	"Folder User 2": "INSERT INTO folder_users (folder_id, user_id) VALUES('1234439', '123343' );"}
+	"User 1":        "INSERT INTO users (id, first_name, last_name, password) VALUES('324ddsf3', 'Steve', 'Walsh', 'password');",
+	"User 2":        "INSERT INTO users (id, first_name, last_name, password) VALUES('sfs34344', 'Emma', 'Johnson', 'password');",
+	"User 3":        "INSERT INTO users (id, first_name, last_name, password) VALUES('sfsdf443', 'Ted', 'Bundy', 'password');",
+	"Folder 1":      "INSERT INTO folders (id, name, date_created, date_edited) VALUES('werwr433', 'Machine Learning', '2020-01-03', '2020-01-03');",
+	"Folder 2":      "INSERT INTO folders (id, name, date_created, date_edited) VALUES('434rsfg4', 'Cryptography', '2020-01-03', '2020-01-03');",
+	"Folder User 1": "INSERT INTO folder_users (folder_id, user_id) VALUES('werwr433', '324ddsf3' );",
+	"Folder User 2": "INSERT INTO folder_users (folder_id, user_id) VALUES('434rsfg4', '324ddsf3' );"}

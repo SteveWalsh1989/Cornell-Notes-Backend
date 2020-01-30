@@ -52,17 +52,20 @@ func UpdateFolderName(w http.ResponseWriter, r *http.Request) {
 
 	params := mux.Vars(r)
 	// params["id"]
-	q.UpdateFolderName(params["Name"])
+	q.UpdateFolderName(params["id"], params["name"])
 
-	json.NewEncoder(w).Encode(params["Name"])
+	json.NewEncoder(w).Encode(params["name"])
 }
 
 // DeleteFolder : creates and returns folder
 func DeleteFolder(w http.ResponseWriter, r *http.Request) {
 
 	params := mux.Vars(r)
+	fmt.Println("Reached")
 
-	q.DeleteFolder(params["ID"])
+	fmt.Println("ID: ", params)
+
+	q.DeleteFolder(params["id"])
 
 	json.NewEncoder(w).Encode(m.Folders)
 }
