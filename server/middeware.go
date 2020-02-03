@@ -1,6 +1,7 @@
 package main
 
 import (
+	"FYP_Proto_Backend/db"
 	"fmt"
 	"net/http"
 	"strconv"
@@ -18,7 +19,9 @@ func CheckCookie(res http.ResponseWriter, req *http.Request) {
 		}
 	}
 
-	count, _ := strconv.Atoi(cookie.Value)
+	count, err := strconv.Atoi(cookie.Value)
+	db.Check(err)
+
 	count++
 	cookie.Value = strconv.Itoa(count)
 
