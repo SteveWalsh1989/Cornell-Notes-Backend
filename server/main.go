@@ -41,6 +41,9 @@ func (c *CORSRouterDecorator) ServeHTTP(rw http.ResponseWriter, req *http.Reques
 	if req.Method == "OPTIONS" { // Stop here if its Preflighted OPTIONS request
 		return
 	}
+
+	CheckCookie(rw, req) // check for cookie
+
 	db.LogRequest(req.Method, req.URL.Path) // TEST: log url and request type
 
 	c.R.ServeHTTP(rw, req) // Continue request
