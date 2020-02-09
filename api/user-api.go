@@ -6,7 +6,6 @@ import (
 	m "FYP_Proto_Backend/model"
 
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"time"
 
@@ -16,25 +15,30 @@ import (
 // RegisterUser : registers new user
 func RegisterUser(w http.ResponseWriter, r *http.Request) {
 
-	// Check form data correct
-	// create new UUID for new user
 	user := m.User{}
-	id, err := uuid.NewV4()
-	db.Check(err)
 
 	decoder := json.NewDecoder(r.Body)
-
-	err = decoder.Decode(&user) // store details as user
+	err := decoder.Decode(&user)
 	db.Check(err)
 
+	// check if there is an existing user by email and return error if true
+	userExistis := q.CheckUserExists(user)
+	if userExistis {
+		w.WriteHeader(http.StatusConflict)
+		w.Write([]byte("409 - User Email Already Used"))
+		json.NewEncoder(w).Encode()
+		return
+	}
 	// set up other user fields
-	user.ID = id.String() // convert UUID to string
+	id, err2 := uuid.NewV4() // create new UUID for new user
+	db.Check(err2)
+	user.ID = id.String()
 	user.DateCreated = time.Now()
 	user.DateEdited = time.Now()
-	fmt.Println("time: ", user.DateCreated) // testing - print user details
+	//fmt.Println("time: ", user.DateCreated) // testing - print user details
 
-	q.CreateUser(user)
+	q.CreateUser(user) // Call db query
 
-	fmt.Println(user) // testing - print user details
+	//fmt.Println(user) // testing - print user details
 	json.NewEncoder(w).Encode(&user)
 }

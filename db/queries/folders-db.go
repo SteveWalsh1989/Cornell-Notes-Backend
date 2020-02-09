@@ -8,7 +8,7 @@ import (
 	"time"
 )
 
-var ctx context.Context
+var Ctx context.Context
 
 //GetFolder ... using folder ID returns folder from db as Folder struct
 func GetFolder(id string) m.Folder {
