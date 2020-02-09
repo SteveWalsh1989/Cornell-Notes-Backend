@@ -28,13 +28,13 @@ var CreateTables = map[string]string{
 	"review_users":  "CREATE TABLE review_users  (review_id VARCHAR(36), user_id VARCHAR(36), PRIMARY KEY(review_id, user_id));",
 	"tags":          "CREATE TABLE tags (id VARCHAR(36) NOT NULL PRIMARY KEY, name VARCHAR(36), user_id VARCHAR(36), status VARCHAR(10) DEFAULT 'Active', date_created datetime, date_edited datetime);",
 	"tag_items":     "CREATE TABLE tag_items (tag_id VARCHAR(36) NOT NULL, item_id VARCHAR(36), item_type VARCHAR(36));",
-	"users":         "CREATE TABLE users (id VARCHAR(36) NOT NULL PRIMARY KEY, first_name VARCHAR(36), last_name VARCHAR(36), password VARCHAR(10), status VARCHAR(10) DEFAULT 'Active', date_created datetime, date_edited datetime) ;"}
+	"users":         "CREATE TABLE users (id VARCHAR(36) NOT NULL PRIMARY KEY, name VARCHAR(36), password VARCHAR(10), status VARCHAR(10) DEFAULT 'Active', date_created datetime, date_edited datetime) ;"}
 
-//InsertSampleDataCommands ... inserts sample data into DB
+//InsertSampleData ... inserts sample data into DB
 var InsertSampleData = map[string]string{
-	"User 1":        "INSERT INTO users (id, first_name, last_name, password) VALUES('324ddsf3', 'Steve', 'Walsh', 'password');",
-	"User 2":        "INSERT INTO users (id, first_name, last_name, password) VALUES('sfs34344', 'Emma', 'Johnson', 'password');",
-	"User 3":        "INSERT INTO users (id, first_name, last_name, password) VALUES('sfsdf443', 'Ted', 'Bundy', 'password');",
+	"User 1":        "INSERT INTO users (id, name, password) VALUES('324ddsf3', 'Steve', 'password');",
+	"User 2":        "INSERT INTO users (id, name, password) VALUES('sfs34344', 'Emma Watson', 'password');",
+	"User 3":        "INSERT INTO users (id, name, password) VALUES('sfsdf443', 'Ted Bundy', 'password');",
 	"Folder 1":      "INSERT INTO folders (id, name, date_created, date_edited) VALUES('werwr433', 'Machine Learning', '2020-01-03', '2020-01-03');",
 	"Folder 2":      "INSERT INTO folders (id, name, date_created, date_edited) VALUES('434rsfg4', 'Cryptography', '2020-01-03', '2020-01-03');",
 	"Folder User 1": "INSERT INTO folder_users (folder_id, user_id) VALUES('werwr433', '324ddsf3' );",
