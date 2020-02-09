@@ -2,7 +2,9 @@ package api
 
 import (
 	"FYP_Proto_Backend/db"
+	q "FYP_Proto_Backend/db/queries"
 	m "FYP_Proto_Backend/model"
+
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -15,7 +17,6 @@ import (
 func RegisterUser(w http.ResponseWriter, r *http.Request) {
 
 	// Check form data correct
-
 	// create new UUID for new user
 	user := m.User{}
 	id, err := uuid.NewV4()
@@ -30,9 +31,9 @@ func RegisterUser(w http.ResponseWriter, r *http.Request) {
 	user.ID = id.String() // convert UUID to string
 	user.DateCreated = time.Now()
 	user.DateEdited = time.Now()
-	user.Status = "Active"
-
 	fmt.Println("time: ", user.DateCreated) // testing - print user details
+
+	q.CreateUser(user)
 
 	fmt.Println(user) // testing - print user details
 	json.NewEncoder(w).Encode(&user)
