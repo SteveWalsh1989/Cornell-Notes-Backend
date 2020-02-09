@@ -10,6 +10,11 @@ import (
 func ServeRoutes(router *mux.Router) {
 
 	/*
+	 * Login / Register User
+	 */
+	router.HandleFunc("/register", api.RegisterUser).Methods("POST", "OPTIONS")
+
+	/*
 	 * FOLDERS
 	 */
 	router.HandleFunc("/folders", api.GetFolders).Methods("GET", "OPTIONS")
