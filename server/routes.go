@@ -13,6 +13,7 @@ func ServeRoutes(router *mux.Router) {
 	 * Login / Register User
 	 */
 	router.HandleFunc("/register", api.RegisterUser).Methods("POST", "OPTIONS")
+	router.HandleFunc("/login", api.LoginUser).Methods("GET", "OPTIONS")
 
 	/*
 	 * FOLDERS

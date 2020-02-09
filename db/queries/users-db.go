@@ -26,19 +26,12 @@ func CreateUser(user m.User) {
 //CheckUserExists ... uses the email provided to check if the user already has an account
 func CheckUserExists(user m.User) bool {
 	res := false
-
-	db.LogValue("user email: ", user.Email)
-
 	conn := db.CreateConn()
 	var existingUser m.User // stores if there is an existing user
 
 	query := "SELECT email FROM Users WHERE email= '" + user.Email + "'"
-
-	fmt.Println("Query: ", query)
-
 	rows, err := conn.Query(query)
 	db.Check(err)
-
 	for rows.Next() {
 		if err := rows.Scan(&existingUser.Email); err != nil {
 			fmt.Println("Error Scanning Rows: ", err)
@@ -50,8 +43,32 @@ func CheckUserExists(user m.User) bool {
 	db.Check(err)
 
 	db.CloseConn(conn)
-
-	fmt.Println("res:", res)
-
 	return res
+}
+
+//LoginUser ... logs in existing user
+func LoginUser(user m.User) m.User {
+	conn := db.CreateConn()
+	//worked
+	fmt.Println("LoginUser: email: ", user.Email)       // testing - print user details
+	fmt.Println("LoginUser: password: ", user.Password) // testing - print user details
+	var loggedInUser m.User                             // stores if there is an existing user
+
+	query := "SELECT u.id, u.email, u.name FROM Users u WHERE u.email= '" + user.Email + "' AND u.password= '" + user.Password + "'"
+	rows, err := conn.Query(query)
+	db.Check(err)
+	for rows.Next() {
+		if err := rows.Scan(&loggedInUser.ID, &loggedInUser.Email, &loggedInUser.Name); err != nil {
+			fmt.Println("Error Scanning Rows: ", err)
+		}
+		//worked
+		fmt.Println("loggedInUser: email: ", loggedInUser.Email)       // testing - print user details
+		fmt.Println("loggedInUser: password: ", loggedInUser.Password) // testing - print user details
+
+	}
+	err = rows.Err()
+	db.Check(err)
+	db.CloseConn(conn)
+
+	return loggedInUser
 }
