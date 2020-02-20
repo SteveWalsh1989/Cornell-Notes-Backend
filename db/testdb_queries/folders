@@ -1,0 +1,12 @@
+-- Folders with item types and ids 
+SELECT fu.user_id, 
+f.id AS folder_id, 
+f.title AS folder_title, 
+fi.item_type,
+fi.item_id
+FROM sys.folders f 
+JOIN sys.folder_users fu 
+ON (fu.folder_id = f.id) 
+JOIN sys.folder_items fi
+ON f.id = fi.folder_id 
+WHERE fu.user_id = '324ddsf3'
