@@ -11,16 +11,16 @@ func GetTags(id string) []m.Tag {
 	conn := db.CreateConn()
 	var tag m.Tag
 	var tags []m.Tag
-
-	query := "SELECT t.id FROM Tags t JOIN tag_users u ON t.id = WHERE id=" + id
+	fmt.Println("id: ", id)
+	query := "SELECT t.id, t.title, t.color FROM tags t JOIN tag_items ti ON t.id = ti.tag_id WHERE t.user_id =" + id
+	fmt.Println("query: ", query)
 	rows, err := conn.Query(query)
 	db.Check(err)
-
 	for rows.Next() {
-		if err := rows.Scan(&tag.ID, &tag.Title); err != nil {
+		if err := rows.Scan(&tag.ID, &tag.Title, &tag.Color); err != nil {
 			fmt.Println("Error", err)
 		}
-		fmt.Println("tag: ", tag.Title)
+		fmt.Println("here 22")
 		tags = append(tags, tag) // add tag to list of tags
 	}
 	err = rows.Err()

@@ -15,12 +15,12 @@ import (
 
 // GetTags -  get user tags
 func GetTags(w http.ResponseWriter, r *http.Request) {
-	params := mux.Vars(r)
-
+	fmt.Println("Here anyhow") // testing
 	var tags []m.Tag
-	tags = q.GetTags(params["ID"])
-
-	fmt.Println("GetTags: ", tags)
+	// Get query parameters
+	id, _ := r.URL.Query()["id"]
+	tags = q.GetTags(id[0])
+	fmt.Println("GetTags: ", tags) // testing
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(tags)
 }
@@ -38,6 +38,8 @@ func CreateTag(w http.ResponseWriter, r *http.Request) {
 	tag.Color = params["color"]
 	tag.DateCreated = time.Now()
 	tag.DateEdited = time.Now()
+
+	fmt.Println("CreateTag: ", tag) // testing
 
 	tag = q.CreateTag(tag, params["userId"])
 

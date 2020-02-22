@@ -1,0 +1,8 @@
+-- Gets tags using userID 
+SELECT t.id, t.title, ti.item_id, ti.item_type
+FROM sys.tags t
+JOIN sys.tag_items ti
+ON t.id = ti.tag_id
+WHERE t.user_id = '324ddsf3'
+
+

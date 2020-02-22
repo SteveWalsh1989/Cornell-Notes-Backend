@@ -27,6 +27,6 @@ var CreateTables = map[string]string{
 	"review_cues":   "CREATE TABLE review_cues (review_id VARCHAR(36) NOT NULL, cue_id VARCHAR(36) NOT NULL, PRIMARY KEY(review_id, cue_id));",
 	"shared_group":  "CREATE TABLE shared_group (id VARCHAR(36) NOT NULL PRIMARY KEY, group_name VARCHAR(36), admin_id VARCHAR(36));",
 	"review_users":  "CREATE TABLE review_users  (review_id VARCHAR(36), user_id VARCHAR(36), PRIMARY KEY(review_id, user_id));",
-	"tags":          "CREATE TABLE tags (id VARCHAR(36) NOT NULL PRIMARY KEY, title VARCHAR(36), user_id VARCHAR(36), status VARCHAR(10) DEFAULT 'Active', date_created datetime, date_edited datetime);",
+	"tags":          "CREATE TABLE tags (id VARCHAR(36) NOT NULL PRIMARY KEY, title VARCHAR(36), user_id VARCHAR(36), color VARCHAR(30), status VARCHAR(10) DEFAULT 'Active', date_created datetime, date_edited datetime);",
 	"tag_items":     "CREATE TABLE tag_items (tag_id VARCHAR(36) NOT NULL, item_id VARCHAR(36), item_type VARCHAR(36));",
 	"users":         "CREATE TABLE users (id VARCHAR(36) NOT NULL PRIMARY KEY, user_name VARCHAR(36),email VARCHAR(50),  password VARCHAR(10), status VARCHAR(10) DEFAULT 'Active', date_created datetime, date_edited datetime) ;"}
