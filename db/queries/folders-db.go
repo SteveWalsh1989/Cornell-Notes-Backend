@@ -20,7 +20,7 @@ func GetFolder(id string) m.Folder {
 	rows, err := conn.Query(query)
 	db.Check(err)
 	for rows.Next() {
-		if err := rows.Scan(&folder.Title, &folder.ID, &folder.Status,
+		if err := rows.Scan(&folder.Title, &folder.ID,
 			&folder.DateCreated, &folder.DateEdited); err != nil {
 			fmt.Println("Error", err)
 		}
