@@ -69,11 +69,15 @@ func UpdateTag(w http.ResponseWriter, r *http.Request) {
 
 // DeleteTag - deletes tag using id
 func DeleteTag(w http.ResponseWriter, r *http.Request) {
+	ID, _ := r.URL.Query()["tagId"]
 	userID, _ := r.URL.Query()["userId"]
-	title, _ := r.URL.Query()["title"]
 
-	q.DeleteTag(title[0], userID[0])
+	var tag m.Tag
+	tag.ID = ID[0]
+	tag.DateEdited = time.Now()
+	tag.Status = "Deleted"
+	deleted := q.DeleteTag(tag, userID[0])
 
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(userID)
+	json.NewEncoder(w).Encode(deleted)
 }

@@ -11,7 +11,7 @@ func GetTags(id string) []m.Tag {
 	conn := db.CreateConn()
 	var tag m.Tag
 	var tags []m.Tag
-	query := "SELECT t.id, t.title, t.color FROM tags t WHERE t.user_id =" + id
+	query := "SELECT t.id, t.title, t.color FROM tags t WHERE t.status = 'Active' AND t.user_id =" + id
 	rows, err := conn.Query(query)
 	db.Check(err)
 	for rows.Next() {
@@ -55,6 +55,12 @@ func AddTagItem(tagID string, itemID string) {
 }
 
 //DeleteTag ... deletes tag by id
-func DeleteTag(title string, userID string) {
-
+func DeleteTag(tag m.Tag, userID string) bool {
+	conn := db.CreateConn()
+	stmt, err := conn.Prepare("UPDATE tags SET status=?, date_edited=? WHERE id=? AND user_id=?;")
+	db.Check(err)
+	_, errr := stmt.Exec(tag.Status, tag.DateEdited, tag.ID, userID)
+	db.Check(errr)
+	db.CloseConn(conn)
+	return true
 }
