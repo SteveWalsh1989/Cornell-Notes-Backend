@@ -11,7 +11,9 @@ func GetTags(id string) []m.Tag {
 	conn := db.CreateConn()
 	var tag m.Tag
 	var tags []m.Tag
-	query := "SELECT t.id, t.title, t.color FROM tags t WHERE t.status = 'Active' AND t.user_id =" + id
+	query := "SELECT t.id, t.title, t.color FROM tags t WHERE t.status = 'Active' AND t.user_id = '" + id + "'"
+	fmt.Println("query:", query)
+
 	rows, err := conn.Query(query)
 	db.Check(err)
 	for rows.Next() {

@@ -16,6 +16,8 @@ func GetTags(w http.ResponseWriter, r *http.Request) {
 	var tags []m.Tag
 	// Get query parameters
 	id, _ := r.URL.Query()["id"]
+
+	db.LogTitle(id[0])
 	tags = q.GetTags(id[0])
 	// fmt.Println("GetTags: ", tags) // testing
 	w.Header().Set("Content-Type", "application/json")
