@@ -3,7 +3,6 @@ package queries
 import (
 	"FYP_Proto_Backend/db"
 	m "FYP_Proto_Backend/model"
-	"fmt"
 )
 
 //GetTags ... using folder ID returns tag from
@@ -12,13 +11,12 @@ func GetTags(id string) []m.Tag {
 	var tag m.Tag
 	var tags []m.Tag
 	query := "SELECT t.id, t.title, t.color FROM tags t WHERE t.status = 'Active' AND t.user_id = '" + id + "'"
-	fmt.Println("query:", query)
 
 	rows, err := conn.Query(query)
 	db.Check(err)
 	for rows.Next() {
 		if err := rows.Scan(&tag.ID, &tag.Title, &tag.Color); err != nil {
-			fmt.Println("Error", err)
+			db.Check(err)
 		}
 		tags = append(tags, tag) // add tag to list of tags
 	}

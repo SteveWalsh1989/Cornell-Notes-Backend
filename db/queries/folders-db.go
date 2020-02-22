@@ -21,7 +21,7 @@ func GetFolder(id string) m.Folder {
 	db.Check(err)
 
 	for rows.Next() {
-		if err := rows.Scan(&folder.Name, &folder.ID, &folder.Status,
+		if err := rows.Scan(&folder.Title, &folder.ID, &folder.Status,
 			&folder.DateCreated, &folder.DateEdited); err != nil {
 			fmt.Println("Error", err)
 		}
@@ -34,38 +34,47 @@ func GetFolder(id string) m.Folder {
 	return folder
 }
 
-//GetFolders ... using folder ID returns folder from db as Folder struct
-func GetFolders() []m.Folder {
+//GetFoldersItems ... using folder ID returns folder from db as Folder struct
+func GetFoldersItems(userID string) []m.FolderItem {
 
 	conn := db.CreateConn()
-	var folder m.Folder
-	var folders = []m.Folder{}
+	var folderItem m.FolderItem
+	var folderItems []m.FolderItem
 
-	rows, err := conn.Query("SELECT * FROM Folders")
+	query := "SELECT f.id AS folder_id, f.title AS folder_title, fi.item_type, fi.item_id " +
+		"FROM folders f JOIN folder_users fu " +
+		"ON (fu.folder_id = f.id) " +
+		"JOIN folder_items fi " +
+		"ON f.id = fi.folder_id " +
+		"WHERE fu.user_id = '" + userID + "'"
+	fmt.Println("query: ", query)
+
+	rows, err := conn.Query(query)
+
 	db.Check(err)
 
 	for rows.Next() {
-		if err := rows.Scan(&folder.ID, &folder.Name, &folder.Status,
-			&folder.DateCreated, &folder.DateEdited); err != nil {
+		if err := rows.Scan(&folderItem.ID, &folderItem.Title,
+			&folderItem.Type, &folderItem.ItemID); err != nil {
 			// Check for a scan error.
 			// Query rows will be closed with defer.
 			fmt.Println("Error: ", err)
 		}
-		// fmt.Println("folder: ", folder.Name)
-		folders = append(folders, folder)
+		fmt.Println("folderItem: ", folderItem.Title)
+		folderItems = append(folderItems, folderItem)
 	}
 	err = rows.Err()
 	db.Check(err)
 
 	db.CloseConn(conn)
-	return folders
+	return folderItems
 }
 
 //UpdateFolderName ... Updates name of folder
 func UpdateFolderName(id string, name string) {
 	conn := db.CreateConn()
 
-	stmt, err := conn.Prepare("UPDATE folders SET name = ? WHERE id = ?")
+	stmt, err := conn.Prepare("UPDATE folders SET Title = ? WHERE id = ?")
 	db.Check(err)
 	_, err = stmt.Exec(name, id)
 	db.Check(err)

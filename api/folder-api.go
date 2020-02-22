@@ -14,13 +14,22 @@ import (
 
 // GetFolders : returns all folders
 func GetFolders(w http.ResponseWriter, r *http.Request) {
-	var folders []m.Folder
-	folders = q.GetFolders()
+	var folderItems []m.FolderItem
+	id, _ := r.URL.Query()["id"]
+
+	// Get folders itemIDs and item_types
+	folderItems = q.GetFoldersItems(id[0])
+
+	// Get folder items name
+	for _, item := range folderItems {
+		fmt.Println("Folder: ", item.Type)
+
+	}
 
 	// fmt.Println("GetFolders: ", folders) // testing
 
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(folders)
+	json.NewEncoder(w).Encode(folderItems)
 }
 
 // GetFolder : returns folder by id
@@ -30,7 +39,7 @@ func GetFolder(w http.ResponseWriter, r *http.Request) {
 	var folder m.Folder
 	folder = q.GetFolder(params["ID"])
 
-	fmt.Println("GetFolder: folder name: ", folder.Name)
+	fmt.Println("GetFolder: folder name: ", folder.Title)
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(folder)
 }
