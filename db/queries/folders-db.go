@@ -8,6 +8,7 @@ import (
 	"time"
 )
 
+//Ctx ... context for db queries
 var Ctx context.Context
 
 //GetFolder ... using folder ID returns folder from db as Folder struct

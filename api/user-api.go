@@ -32,6 +32,7 @@ func RegisterUser(w http.ResponseWriter, r *http.Request) {
 	}
 	// set up other user fields
 	id, err2 := uuid.NewV4() // create new UUID for new user
+
 	db.Check(err2)
 	user.ID = id.String()
 	user.DateCreated = time.Now()

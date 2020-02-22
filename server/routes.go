@@ -20,8 +20,16 @@ func ServeRoutes(router *mux.Router) {
 	 */
 	router.HandleFunc("/folders", api.GetFolders).Methods("GET", "OPTIONS")
 	router.HandleFunc("/folder", api.CreateFolder).Methods("POST", "OPTIONS")
+	router.HandleFunc("/folder", api.UpdateFolderName).Methods("PUT", "OPTIONS")
 	router.HandleFunc("/folders/", api.GetFolders).Methods("GET", "OPTIONS")
-	router.HandleFunc("/folder/{id}", api.GetFolder).Methods("GET", "OPTIONS")
-	router.HandleFunc("/updateFolderName/{id}/{name}", api.UpdateFolderName).Methods("PUT", "OPTIONS")
 	router.HandleFunc("/folder/{id}", api.DeleteFolder).Methods("DELETE", "OPTIONS")
+
+	/*
+	 * Tags
+	 */
+	router.HandleFunc("/tags", api.GetTags).Methods("GET", "OPTIONS")
+	router.HandleFunc("/tag", api.CreateTag).Methods("POST", "OPTIONS")
+	router.HandleFunc("/tag", api.UpdateTag).Methods("PUT", "OPTIONS")
+	router.HandleFunc("/tag", api.DeleteTag).Methods("DELETE", "OPTIONS")
+
 }

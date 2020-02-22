@@ -13,7 +13,7 @@ func CreateUser(user m.User) {
 
 	conn := db.CreateConn()
 
-	stmt, err := conn.Prepare("INSERT INTO users (id, name, email, password, date_created, date_edited) VALUES(?,?,?,?,?,?);")
+	stmt, err := conn.Prepare("INSERT INTO users (id, user_name, email, password, date_created, date_edited) VALUES(?,?,?,?,?,?);")
 	db.Check(err)
 
 	_, errr := stmt.Exec(user.ID, user.Name, user.Email, user.Password, user.DateCreated, user.DateEdited)
@@ -54,7 +54,7 @@ func LoginUser(user m.User) m.User {
 	fmt.Println("LoginUser: password: ", user.Password) // testing - print user details
 	var loggedInUser m.User                             // stores if there is an existing user
 
-	query := "SELECT u.id, u.email, u.name FROM Users u WHERE u.email= '" + user.Email + "' AND u.password= '" + user.Password + "'"
+	query := "SELECT u.id, u.email, u.user_name FROM Users u WHERE u.email= '" + user.Email + "' AND u.password= '" + user.Password + "'"
 	rows, err := conn.Query(query)
 	db.Check(err)
 	for rows.Next() {
