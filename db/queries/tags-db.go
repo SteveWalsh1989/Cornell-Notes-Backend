@@ -39,8 +39,13 @@ func CreateTag(tag m.Tag, userID string) m.Tag {
 }
 
 //UpdateTag ... update tag name
-func UpdateTag(tag m.Tag) m.Tag {
-
+func UpdateTag(tag m.Tag, userID string) m.Tag {
+	conn := db.CreateConn()
+	stmt, err := conn.Prepare("UPDATE tags SET title=?, color=?, date_edited=? WHERE id=? AND user_id=?;")
+	db.Check(err)
+	_, errr := stmt.Exec(tag.Title, tag.Color, tag.DateEdited, tag.ID, userID)
+	db.Check(errr)
+	db.CloseConn(conn)
 	return tag
 }
 
@@ -50,6 +55,6 @@ func AddTagItem(tagID string, itemID string) {
 }
 
 //DeleteTag ... deletes tag by id
-func DeleteTag(tagID string) {
+func DeleteTag(title string, userID string) {
 
 }

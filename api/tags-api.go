@@ -5,11 +5,9 @@ import (
 	q "FYP_Proto_Backend/db/queries"
 	m "FYP_Proto_Backend/model"
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"time"
 
-	"github.com/gorilla/mux"
 	uuid "github.com/satori/go.uuid"
 )
 
@@ -31,43 +29,51 @@ func CreateTag(w http.ResponseWriter, r *http.Request) {
 	color, _ := r.URL.Query()["color"]
 	userID, _ := r.URL.Query()["userId"]
 
-	var tag m.Tag
-	// Build new tag object using passed in name
+	// create new UUID
 	id, err := uuid.NewV4() // create new UUID for new user
 	db.Check(err)
+
+	// Build new tag object using query params
+	var tag m.Tag
 	tag.ID = id.String()
 	tag.Title = title[0]
 	tag.Color = color[0]
 	tag.DateCreated = time.Now()
 	tag.DateEdited = time.Now()
-	fmt.Println("CreateTag: ", tag)
+	//fmt.Println("CreateTag: ", tag)
 
-	tag = q.CreateTag(tag, userID[0])
-
+	tag = q.CreateTag(tag, userID[0]) // run db query
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(tag)
 }
 
 // UpdateTag - update tag name
 func UpdateTag(w http.ResponseWriter, r *http.Request) {
-	params := mux.Vars(r)
+	id, _ := r.URL.Query()["tagId"]
+	title, _ := r.URL.Query()["title"]
+	color, _ := r.URL.Query()["color"]
+	userID, _ := r.URL.Query()["userId"]
 
-	var folder m.Folder
-	folder = q.GetFolder(params["ID"])
+	// Build new tag object using query params
+	var tag m.Tag
+	tag.ID = id[0]
+	tag.Title = title[0]
+	tag.Color = color[0]
+	tag.DateEdited = time.Now()
 
-	fmt.Println("GetFolder: folder name: ", folder.Name)
+	tag = q.UpdateTag(tag, userID[0]) // run db query
+
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(folder)
+	json.NewEncoder(w).Encode(tag)
 }
 
 // DeleteTag - deletes tag using id
 func DeleteTag(w http.ResponseWriter, r *http.Request) {
-	params := mux.Vars(r)
+	userID, _ := r.URL.Query()["userId"]
+	title, _ := r.URL.Query()["title"]
 
-	var folder m.Folder
-	folder = q.GetFolder(params["ID"])
+	q.DeleteTag(title[0], userID[0])
 
-	fmt.Println("GetFolder: folder name: ", folder.Name)
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(folder)
+	json.NewEncoder(w).Encode(userID)
 }
