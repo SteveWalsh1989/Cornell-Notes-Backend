@@ -41,6 +41,7 @@ func GetFoldersItems(userID string) []m.FolderItem {
 	var folderItem m.FolderItem
 	var folderItems []m.FolderItem
 
+	// Build Query
 	query := "SELECT f.id AS folder_id, f.title AS folder_title, fi.item_type, fi.item_id " +
 		"FROM folders f JOIN folder_users fu " +
 		"ON (fu.folder_id = f.id) " +
@@ -49,24 +50,23 @@ func GetFoldersItems(userID string) []m.FolderItem {
 		"WHERE fu.user_id = '" + userID + "'"
 	fmt.Println("query: ", query)
 
+	// Run Query
 	rows, err := conn.Query(query)
-
 	db.Check(err)
-
+	// Assemble Results
 	for rows.Next() {
 		if err := rows.Scan(&folderItem.ID, &folderItem.Title,
-			&folderItem.Type, &folderItem.ItemID); err != nil {
+			&folderItem.ItemType, &folderItem.ItemID); err != nil {
 			// Check for a scan error.
 			// Query rows will be closed with defer.
 			fmt.Println("Error: ", err)
 		}
-		fmt.Println("folderItem: ", folderItem.Title)
 		folderItems = append(folderItems, folderItem)
 	}
 	err = rows.Err()
 	db.Check(err)
-
 	db.CloseConn(conn)
+	// Return Results
 	return folderItems
 }
 

@@ -16,10 +16,11 @@ type Folder struct {
 
 // FolderItem : stores item in folders - notes, cornell notes, pdf
 type FolderItem struct {
-	Title  string `db:"Title" json:"Title"`
-	ID     string `db:"ID" json:"ID"`
-	Type   string `db:"item_type" json:"Item_type"`
-	ItemID string `db:"item_ID" json:"Item_ID"`
+	Title     string `db:"Title" json:"Title"`
+	ID        string `db:"ID" json:"ID"`
+	ItemType  string `db:"item_type" json:"Item_type"`
+	ItemID    string `db:"item_ID" json:"Item_ID"`
+	ItemTitle string `db:"itemTitle" json:"ItemTitle"`
 }
 
 // Folders : list of folders

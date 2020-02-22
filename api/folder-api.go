@@ -15,19 +15,19 @@ import (
 // GetFolders : returns all folders
 func GetFolders(w http.ResponseWriter, r *http.Request) {
 	var folderItems []m.FolderItem
+	var itemNames []m.FolderItem
 	id, _ := r.URL.Query()["id"]
-
 	// Get folders itemIDs and item_types
 	folderItems = q.GetFoldersItems(id[0])
 
-	// Get folder items name
-	for _, item := range folderItems {
-		fmt.Println("Folder: ", item.Type)
+	fmt.Println("GetFolders: About to call q.GetNoteTitle") // testing
 
-	}
+	itemNames = append(itemNames, q.GetNoteTitle(id[0])...)
+	itemNames = append(itemNames, q.GetCornellNoteTitle(id[0])...)
+	//Names = append(Names, q.GetPDFNoteName(PDFIDs))
+	fmt.Println("itemNames: ", itemNames) // testing
 
 	// fmt.Println("GetFolders: ", folders) // testing
-
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(folderItems)
 }
