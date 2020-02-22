@@ -11,16 +11,13 @@ func GetTags(id string) []m.Tag {
 	conn := db.CreateConn()
 	var tag m.Tag
 	var tags []m.Tag
-	fmt.Println("id: ", id)
-	query := "SELECT t.id, t.title, t.color FROM tags t JOIN tag_items ti ON t.id = ti.tag_id WHERE t.user_id =" + id
-	fmt.Println("query: ", query)
+	query := "SELECT t.id, t.title, t.color FROM tags t WHERE t.user_id =" + id
 	rows, err := conn.Query(query)
 	db.Check(err)
 	for rows.Next() {
 		if err := rows.Scan(&tag.ID, &tag.Title, &tag.Color); err != nil {
 			fmt.Println("Error", err)
 		}
-		fmt.Println("here 22")
 		tags = append(tags, tag) // add tag to list of tags
 	}
 	err = rows.Err()
@@ -31,8 +28,13 @@ func GetTags(id string) []m.Tag {
 }
 
 //CreateTag ... add new tag
-func CreateTag(tag m.Tag, user_id string) m.Tag {
-
+func CreateTag(tag m.Tag, userID string) m.Tag {
+	conn := db.CreateConn()
+	stmt, err := conn.Prepare("INSERT INTO tags (id, title, user_id, color, date_created, date_edited) VALUES(?,?,?,?,?,?);")
+	db.Check(err)
+	_, errr := stmt.Exec(tag.ID, tag.Title, userID, tag.Color, tag.DateCreated, tag.DateEdited)
+	db.Check(errr)
+	db.CloseConn(conn)
 	return tag
 }
 

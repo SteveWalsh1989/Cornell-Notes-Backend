@@ -15,35 +15,35 @@ import (
 
 // GetTags -  get user tags
 func GetTags(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("Here anyhow") // testing
 	var tags []m.Tag
 	// Get query parameters
 	id, _ := r.URL.Query()["id"]
 	tags = q.GetTags(id[0])
-	fmt.Println("GetTags: ", tags) // testing
+	// fmt.Println("GetTags: ", tags) // testing
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(tags)
 }
 
 // CreateTag - create new tag
 func CreateTag(w http.ResponseWriter, r *http.Request) {
-	params := mux.Vars(r)
+	// Get query parameters
+	title, _ := r.URL.Query()["title"]
+	color, _ := r.URL.Query()["color"]
+	userID, _ := r.URL.Query()["userId"]
 
 	var tag m.Tag
 	// Build new tag object using passed in name
 	id, err := uuid.NewV4() // create new UUID for new user
 	db.Check(err)
 	tag.ID = id.String()
-	tag.Title = params["title"]
-	tag.Color = params["color"]
+	tag.Title = title[0]
+	tag.Color = color[0]
 	tag.DateCreated = time.Now()
 	tag.DateEdited = time.Now()
-
-	fmt.Println("CreateTag: ", tag) // testing
-
-	tag = q.CreateTag(tag, params["userId"])
-
 	fmt.Println("CreateTag: ", tag)
+
+	tag = q.CreateTag(tag, userID[0])
+
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(tag)
 }
