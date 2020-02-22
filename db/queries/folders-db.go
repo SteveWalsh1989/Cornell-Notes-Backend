@@ -19,7 +19,6 @@ func GetFolder(id string) m.Folder {
 	query := "SELECT * FROM Folders WHERE id=" + id
 	rows, err := conn.Query(query)
 	db.Check(err)
-
 	for rows.Next() {
 		if err := rows.Scan(&folder.Title, &folder.ID, &folder.Status,
 			&folder.DateCreated, &folder.DateEdited); err != nil {
@@ -48,8 +47,7 @@ func GetFoldersItems(userID string) []m.FolderItem {
 		"JOIN folder_items fi " +
 		"ON f.id = fi.folder_id " +
 		"WHERE fu.user_id = '" + userID + "'"
-	fmt.Println("query: ", query)
-
+	// fmt.Println("query: ", query)
 	// Run Query
 	rows, err := conn.Query(query)
 	db.Check(err)

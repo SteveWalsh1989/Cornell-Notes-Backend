@@ -20,13 +20,18 @@ func GetFolders(w http.ResponseWriter, r *http.Request) {
 	// Get folders itemIDs and item_types
 	folderItems = q.GetFoldersItems(id[0])
 
-	fmt.Println("GetFolders: About to call q.GetNoteTitle") // testing
-
+	//fmt.Println("GetFolders: About to call q.GetNoteTitle") // testing
 	itemNames = append(itemNames, q.GetNoteTitle(id[0])...)
 	itemNames = append(itemNames, q.GetCornellNoteTitle(id[0])...)
 	//Names = append(Names, q.GetPDFNoteName(PDFIDs))
-	fmt.Println("itemNames: ", itemNames) // testing
-
+	// Appends the item name to overall folder item
+	for i, item := range folderItems {
+		for _, name := range itemNames {
+			if item.ItemID == name.ID {
+				folderItems[i].ItemTitle = name.Title
+			}
+		}
+	}
 	// fmt.Println("GetFolders: ", folders) // testing
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(folderItems)

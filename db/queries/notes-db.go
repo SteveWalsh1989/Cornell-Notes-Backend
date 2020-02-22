@@ -8,7 +8,6 @@ import (
 
 // GetNoteTitle ...gets name of note using ID
 func GetNoteTitle(ID string) []m.FolderItem {
-	fmt.Println("GetNoteTitle: Reached")
 
 	conn := db.CreateConn()
 	var item m.FolderItem
@@ -16,8 +15,6 @@ func GetNoteTitle(ID string) []m.FolderItem {
 	// Build Query
 	query := "SELECT n.id, n.title FROM notes n JOIN note_users nu ON n.id = nu.note_id WHERE nu.user_id = '" + ID + "' AND n.status = 'Active'"
 	// Run Query
-	fmt.Println("GetNoteTitle: ", query)
-
 	rows, err := conn.Query(query)
 	db.Check(err)
 	// Assemble Results
