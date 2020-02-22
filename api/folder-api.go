@@ -14,27 +14,52 @@ import (
 
 // GetFolders : returns all folders
 func GetFolders(w http.ResponseWriter, r *http.Request) {
+	var folders []m.Folder
+	var folderItem m.FolderItem
 	var folderItems []m.FolderItem
 	var itemNames []m.FolderItem
 	id, _ := r.URL.Query()["id"]
 	// Get folders itemIDs and item_types
 	folderItems = q.GetFoldersItems(id[0])
-
 	//fmt.Println("GetFolders: About to call q.GetNoteTitle") // testing
 	itemNames = append(itemNames, q.GetNoteTitle(id[0])...)
 	itemNames = append(itemNames, q.GetCornellNoteTitle(id[0])...)
-	//Names = append(Names, q.GetPDFNoteName(PDFIDs))
 	// Appends the item name to overall folder item
 	for i, item := range folderItems {
 		for _, name := range itemNames {
 			if item.ItemID == name.ID {
-				folderItems[i].ItemTitle = name.Title
+				folderItems[i].ItemTitle = name.Title // add name to folder item
 			}
 		}
 	}
-	// fmt.Println("GetFolders: ", folders) // testing
+	for _, item := range folderItems {
+		exists := false
+		for i, folder := range folders {
+			if folder.ID == item.ID {
+				exists = true // add to existing folder
+				folderItem.Title = item.Title
+				folderItem.ID = item.ID
+				folderItem.ItemTitle = item.ItemTitle
+				folderItem.ItemID = item.ItemID
+				folderItem.ItemType = item.ItemType
+				folders[i].Items = append(folders[i].Items, folderItem)
+			}
+		}
+		if !exists { // create new folder folder
+			var newfolder m.Folder
+			folderItem.Title = item.Title
+			folderItem.ID = item.ID
+			newfolder.ID = item.ID
+			newfolder.Title = item.Title
+			folderItem.ItemTitle = item.ItemTitle
+			folderItem.ItemID = item.ItemID
+			folderItem.ItemType = item.ItemType
+			newfolder.Items = append(newfolder.Items, folderItem)
+			folders = append(folders, newfolder)
+		}
+	}
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(folderItems)
+	json.NewEncoder(w).Encode(folders)
 }
 
 // GetFolder : returns folder by id
