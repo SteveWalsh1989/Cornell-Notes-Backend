@@ -7,7 +7,7 @@ import (
 // CornellNote : Sample struct for CornellNote
 type CornellNote struct {
 	ID          string       `db:"id" json:"ID"`
-	Name        string       `db:"name" json:"Name"`
+	Title       string       `db:"title" json:"title"`
 	Status      string       `db:"status" json:"Status"`
 	DateCreated time.Time    `db:"date_created" json:"DateCreated"`
 	DateEdited  time.Time    `db:"date_edited" json:"DateEdited"`

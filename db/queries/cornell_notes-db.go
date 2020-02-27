@@ -39,7 +39,7 @@ func GetCornellNoteCues(noteID string, userID string) m.CornellNote {
 	conn := db.CreateConn()
 
 	// Build Query
-	query := "SELECT cc.id AS CueID, cc.cue, cc.answer from sys.cornell_notes cn " +
+	query := "SELECT cn.title, cc.id AS CueID, cc.cue, cc.answer from sys.cornell_notes cn " +
 		"JOIN sys.cornell_cues cc ON cn.id = cc.cornell_note_id " +
 		"JOIN sys.cornell_users cu  ON cc.cornell_note_id = cu.cornell_note_id " +
 		"JOIN sys.users u ON cu.user_id = u.id " +
@@ -50,7 +50,7 @@ func GetCornellNoteCues(noteID string, userID string) m.CornellNote {
 	db.Check(err)
 	// Assemble Results
 	for rows.Next() {
-		if err := rows.Scan(&cornellCue.ID, &cornellCue.Cue, &cornellCue.Answer); err != nil {
+		if err := rows.Scan(&cornellNote.Title, &cornellCue.ID, &cornellCue.Cue, &cornellCue.Answer); err != nil {
 			fmt.Println("Error: ", err)
 		}
 		cornellCues = append(cornellCues, cornellCue)
