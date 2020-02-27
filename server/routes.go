@@ -32,4 +32,12 @@ func ServeRoutes(router *mux.Router) {
 	router.HandleFunc("/tag", api.UpdateTag).Methods("PUT", "OPTIONS")
 	router.HandleFunc("/tag", api.DeleteTag).Methods("DELETE", "OPTIONS")
 
+	/*
+	 * Cornell Notes
+	 */
+	router.HandleFunc("/cornellnote", api.GetCornellNote).Methods("GET", "OPTIONS")
+	router.HandleFunc("/cornellnote", api.CreateCornellNote).Methods("POST", "OPTIONS")
+	router.HandleFunc("/cornellnote", api.UpdateCornellNote).Methods("PUT", "OPTIONS")
+	router.HandleFunc("/cornellnote", api.DeleteCornellNote).Methods("DELETE", "OPTIONS")
+
 }
