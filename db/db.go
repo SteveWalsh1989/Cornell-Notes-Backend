@@ -31,7 +31,6 @@ func SetupDB() {
 	LogTitle("Setting up Database")
 
 	db := CreateConn()
-
 	dropTables(db)    // drop previous tables
 	createTables(db)  // create new tables
 	addSampleData(db) // insert sample data

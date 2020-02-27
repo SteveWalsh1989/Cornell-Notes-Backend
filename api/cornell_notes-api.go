@@ -13,13 +13,17 @@ import (
 
 // GetCornellNote -  GetCornell Note cues and answers
 func GetCornellNote(w http.ResponseWriter, r *http.Request) {
+	var cornellNote m.CornellNote
 	var tags []m.Tag
 	// Get query parameters
-	id, _ := r.URL.Query()["id"]
-	tags = q.GetTags(id[0])
+	noteID, _ := r.URL.Query()["note_id"]
+	userID, _ := r.URL.Query()["user_id"]
+	cornellNote = q.GetCornellNoteCues(noteID[0], userID[0])
+	tags = q.GetCornellNoteTags(noteID[0], userID[0])
+	cornellNote.Tags = tags
 	// fmt.Println("GetTags: ", tags) // testing
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(tags)
+	json.NewEncoder(w).Encode(cornellNote)
 }
 
 // CreateCornellNote - create new Cornell Note
