@@ -102,14 +102,44 @@ func UpdateCornellNote(noteID string, userID string) string {
 
 // UpdateCornellNoteCue ... updates a cornell note cue
 func UpdateCornellNoteCue(cue m.CornellCue, userID string) string {
+	fmt.Println("test date again - ", cue.DateEdited)
 	res := ""
 	conn := db.CreateConn()
-	stmt, err := conn.Prepare("UPDATE cornell_cues cc JOIN sys.cornell_users cu ON cc.cornell_note_id = cu.cornell_note_id SET cc.cue = ? WHERE cu.user_id = ? AND cc.id = ?;")
+	tx, err := conn.Begin()
 	db.Check(err)
-	_, err = stmt.Exec(cue.Cue, userID, cue.ID)
-	db.Check(err)
+	stmt, err := tx.Prepare("UPDATE cornell_cues cc " +
+		"JOIN sys.cornell_users cu ON cc.cornell_note_id = cu.cornell_note_id " +
+		"SET cc.cue = ?, cc.answer = ?  " +
+		"WHERE cu.user_id = ? AND cc.id = ?;")
+	if err != nil {
+		fmt.Println("OOps2", err)
+		tx.Rollback()
+		return "Error"
+	}
+	defer stmt.Close()
+	if _, err := stmt.Exec(cue.Cue, cue.Answer, userID, cue.ID); err != nil {
+		fmt.Println("OOps3", err)
 
-	db.CloseConn(conn)
+		tx.Rollback() // return an error too, we may want to wrap them
+		return "Error"
+	}
+	stmt, err = tx.Prepare("UPDATE cornell_notes cn JOIN cornell_users cu ON cn.id = cu.cornell_note_id " +
+		"SET cn.date_edited = ? WHERE cn.id = ? AND cu.user_id = ?")
+	if err != nil {
+		fmt.Println("OOps4", err)
+
+		tx.Rollback()
+		return "Error"
+	}
+	defer stmt.Close()
+
+	if _, err := stmt.Exec(cue.DateEdited, cue.CornellNoteID, userID); err != nil {
+		fmt.Println("OOps5", err)
+
+		tx.Rollback() // return an error too, we may want to wrap them
+		return "Error"
+	}
+	tx.Commit()
 
 	return res
 }

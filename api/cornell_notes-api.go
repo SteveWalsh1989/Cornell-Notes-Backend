@@ -69,11 +69,11 @@ func UpdateCornellNote(w http.ResponseWriter, r *http.Request) {
 // UpdateCornellNoteCue - update cornell cue
 func UpdateCornellNoteCue(w http.ResponseWriter, r *http.Request) {
 	var cue m.CornellCue
+	// Get Cue details from body and user id from header
 	userID := r.Header.Get("user_id")
 	err := json.NewDecoder(r.Body).Decode(&cue)
 	db.Check(err)
-
-	fmt.Println("\n\ntesting BODY: ", cue.ID)
+	// Update DB with new Cue information
 	res := q.UpdateCornellNoteCue(cue, userID) // run db query
 
 	w.Header().Set("Content-Type", "application/json")
