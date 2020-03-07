@@ -5,6 +5,8 @@ import (
 	q "FYP_Proto_Backend/db/queries"
 	m "FYP_Proto_Backend/model"
 	"encoding/json"
+	"fmt"
+	"io/ioutil"
 	"net/http"
 	"time"
 
@@ -53,22 +55,27 @@ func CreateCornellNote(w http.ResponseWriter, r *http.Request) {
 
 // UpdateCornellNote - update cornell note
 func UpdateCornellNote(w http.ResponseWriter, r *http.Request) {
-	id, _ := r.URL.Query()["tagId"]
-	title, _ := r.URL.Query()["title"]
-	color, _ := r.URL.Query()["color"]
-	userID, _ := r.URL.Query()["userId"]
+	var cornellNote m.CornellNote
+
+	b, err := ioutil.ReadAll(r.Body)
+	defer r.Body.Close()
+	if err != nil {
+		http.Error(w, err.Error(), 500)
+		return
+	}
+	err = json.Unmarshal(b, &cornellNote)
+	fmt.Println("\n\ntesting BODY: ", cornellNote)
+
+	// err = json.NewDecoder(r.Body).Decode(&cornellNote)
+	// db.Check(err)
+
+	fmt.Println("testing note: ", cornellNote)
 
 	// Build new tag object using query params
-	var tag m.Tag
-	tag.ID = id[0]
-	tag.Title = title[0]
-	tag.Color = color[0]
-	tag.DateEdited = time.Now()
-
-	tag = q.UpdateTag(tag, userID[0]) // run db query
+	// res := q.UpdateCornellNote(note[0], userID[0]) // run db query
 
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(tag)
+	json.NewEncoder(w).Encode(cornellNote)
 }
 
 // DeleteCornellNote - deletes cornell note using id

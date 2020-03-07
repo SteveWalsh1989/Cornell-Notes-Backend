@@ -92,3 +92,10 @@ func GetCornellNoteTags(noteID string, userID string) []m.Tag {
 
 	return tags
 }
+
+// UpdateCornellNote ... updates a cornell note
+func UpdateCornellNote(noteID string, userID string) string {
+	res := ""
+
+	return res
+}
