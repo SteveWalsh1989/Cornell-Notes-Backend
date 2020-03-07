@@ -6,7 +6,6 @@ import (
 	m "FYP_Proto_Backend/model"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"net/http"
 	"time"
 
@@ -57,20 +56,13 @@ func CreateCornellNote(w http.ResponseWriter, r *http.Request) {
 func UpdateCornellNote(w http.ResponseWriter, r *http.Request) {
 	var cornellNote m.CornellNote
 
-	b, err := ioutil.ReadAll(r.Body)
-	defer r.Body.Close()
-	if err != nil {
-		http.Error(w, err.Error(), 500)
-		return
-	}
-	err = json.Unmarshal(b, &cornellNote)
-	fmt.Println("\n\ntesting BODY: ", cornellNote)
+	err := json.NewDecoder(r.Body).Decode(&cornellNote)
+	db.Check(err)
+
+	fmt.Println("\n\ntesting BODY: ", cornellNote.Title)
 
 	// err = json.NewDecoder(r.Body).Decode(&cornellNote)
-	// db.Check(err)
-
-	fmt.Println("testing note: ", cornellNote)
-
+	// db.Check(err
 	// Build new tag object using query params
 	// res := q.UpdateCornellNote(note[0], userID[0]) // run db query
 
