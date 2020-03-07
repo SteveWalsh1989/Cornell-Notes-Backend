@@ -99,3 +99,17 @@ func UpdateCornellNote(noteID string, userID string) string {
 
 	return res
 }
+
+// UpdateCornellNoteCue ... updates a cornell note cue
+func UpdateCornellNoteCue(cue m.CornellCue, userID string) string {
+	res := ""
+	conn := db.CreateConn()
+	stmt, err := conn.Prepare("UPDATE cornell_cues cc JOIN sys.cornell_users cu ON cc.cornell_note_id = cu.cornell_note_id SET cc.cue = ? WHERE cu.user_id = ? AND cc.id = ?;")
+	db.Check(err)
+	_, err = stmt.Exec(cue.Cue, userID, cue.ID)
+	db.Check(err)
+
+	db.CloseConn(conn)
+
+	return res
+}
