@@ -10,9 +10,9 @@ import (
 func GetNote(noteID string, userID string) m.Note {
 	var note m.Note
 	conn := db.CreateConn()
-	query := "SELECT n.title, n.id, n.body, n.date_created, n.date_edited FROM notes n JOIN note_users nu on n.id = nu.note_id WHERE nu.user_id ='" + userID + "' AND n.id='" + noteID + "'"
-
-	fmt.Println("DB: QUERY :", query)
+	query := "SELECT n.title, n.id, n.body, n.date_created, n.date_edited " +
+		"FROM notes n JOIN note_users nu on n.id = nu.note_id " +
+		"WHERE nu.user_id ='" + userID + "' AND n.id='" + noteID + "'"
 	rows, err := conn.Query(query)
 	db.Check(err)
 	for rows.Next() {
@@ -23,7 +23,6 @@ func GetNote(noteID string, userID string) m.Note {
 	}
 	err = rows.Err()
 	db.Check(err)
-	fmt.Println("DB: Response :", note)
 
 	db.CloseConn(conn)
 	return note
