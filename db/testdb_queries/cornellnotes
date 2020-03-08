@@ -1,0 +1,21 @@
+
+SELECT cc.cue,cn.date_edited, cn.id
+From sys.cornell_notes cn
+JOIN sys.cornell_users cu
+ON cn.id = cu.cornell_note_id
+JOIN sys.cornell_cues cc
+ON cc.cornell_note_id = cu.cornell_note_id
+WHERE cu.user_id =  "324ddsf3" AND cc.id = "2435ttgfsf"
+
+SELECT cn.title, cn.id
+FROM sys.cornell_notes cn
+JOIN sys.cornell_users cnu
+ON cn.id = cnu.cornell_note_id
+WHERE cnu.user_id = '324ddsf3';
+
+
+UPDATE sys.cornell_notes cn 
+JOIN sys.cornell_users cu 
+ON cn.id = cu.cornell_note_id
+SET cn.date_edited = "2020-03-07 22:48:06.86 +0000 UTCdate_edited" 
+WHERE cn.id = "23rresfdf434r34r34" AND cu.user_id ="324ddsf3"

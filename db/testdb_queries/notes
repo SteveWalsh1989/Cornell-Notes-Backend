@@ -1,0 +1,6 @@
+SELECT n.id, n.title
+FROM sys.notes n 
+JOIN sys.note_users nu 
+ON n.id = nu.note_id 
+WHERE nu.user_id = '324ddsf3' AND n.status = 'Active'
+;
