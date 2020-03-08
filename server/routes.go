@@ -39,12 +39,14 @@ func ServeRoutes(router *mux.Router) {
 	router.HandleFunc("/cornellnote", api.CreateCornellNote).Methods("POST", "OPTIONS")
 	router.HandleFunc("/cornellnote", api.UpdateCornellNote).Methods("PUT", "OPTIONS")
 	router.HandleFunc("/cornellnote", api.DeleteCornellNote).Methods("DELETE", "OPTIONS")
-
-	/*
-	 * Cornell Note Cues
-	 */
 	//  router.HandleFunc("/cornellnote/cue", api.addCornellNoteCue).Methods("POST", "OPTIONS")
 	router.HandleFunc("/cornellnote/cue", api.UpdateCornellNoteCue).Methods("PUT", "OPTIONS")
 	//  router.HandleFunc("/cornellnote/cue", api.DeleteCornellNoteCue).Methods("DELETE", "OPTIONS")
 
+	/*
+	 * Notes
+	 */
+	router.HandleFunc("/note", api.SaveNote).Methods("POST", "OPTIONS")
+	router.HandleFunc("/note", api.UpdateNote).Methods("PUT", "OPTIONS")
+	router.HandleFunc("/note", api.DeleteNote).Methods("DELETE", "OPTIONS")
 }

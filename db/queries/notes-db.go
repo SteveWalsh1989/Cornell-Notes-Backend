@@ -30,3 +30,50 @@ func GetNoteTitle(ID string) []m.FolderItem {
 	// Return Results
 	return items
 }
+
+// SaveNote ... adds new note to DB
+func SaveNote(note m.Note, folderID string, userID string) string {
+	res := ""
+	conn := db.CreateConn()
+	tx, err := conn.Begin()
+	db.Check(err)
+	stmt, err := tx.Prepare("INSERT INTO folder_items (folder_id, item_id, item_type) VALUES (?, ?, ?) ;")
+	if err != nil {
+		fmt.Println("OOps2", err)
+		tx.Rollback()
+		return "Error"
+	}
+	defer stmt.Close()
+	if _, err := stmt.Exec(folderID, note.ID, "Note"); err != nil {
+		fmt.Println("OOps3", err)
+
+		tx.Rollback() // return an error too, we may want to wrap them
+		return "Error"
+	}
+	stmt, err = tx.Prepare("INSERT INTO notes (id, title, date_created) VALUES (?, ?, ?) ;")
+	if err != nil {
+		fmt.Println("OOps4", err)
+		tx.Rollback()
+		return "Error"
+	}
+	defer stmt.Close()
+	if _, err := stmt.Exec(note.ID, note.Title, note.DateCreated); err != nil {
+		fmt.Println("OOps5", err)
+		tx.Rollback() // return an error too, we may want to wrap them
+		return "Error"
+	}
+	stmt, err = tx.Prepare("INSERT INTO note_users (note_id, user_id) VALUES (?, ?) ;")
+	if err != nil {
+		fmt.Println("OOps6", err)
+		tx.Rollback()
+		return "Error"
+	}
+	defer stmt.Close()
+	if _, err := stmt.Exec(note.ID, userID); err != nil {
+		fmt.Println("OOps7", err)
+		tx.Rollback() // return an error too, we may want to wrap them
+		return "Error"
+	}
+	tx.Commit()
+	return res
+}
