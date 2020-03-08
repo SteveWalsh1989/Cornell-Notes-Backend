@@ -13,6 +13,16 @@ import (
 	uuid "github.com/satori/go.uuid"
 )
 
+// GetNote ... gets notes contents
+func GetNote(w http.ResponseWriter, r *http.Request) {
+	userID := r.Header.Get("user_id")
+	noteID, _ := r.URL.Query()["note_id"]
+
+	note := q.GetNote(noteID[0], userID) // run db query
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(note)
+}
+
 // SaveNote - add new note
 func SaveNote(w http.ResponseWriter, r *http.Request) {
 	userID := r.Header.Get("user_ID")
@@ -33,13 +43,12 @@ func SaveNote(w http.ResponseWriter, r *http.Request) {
 
 // UpdateNote - update  note
 func UpdateNote(w http.ResponseWriter, r *http.Request) {
+	userID := r.Header.Get("user_ID")
 	var note m.Note
-
 	err := json.NewDecoder(r.Body).Decode(&note)
 	db.Check(err)
 
-	fmt.Println("\n\ntesting BODY: ", note.Title)
-	// res := q.UpdateCornellNote(note[0], userID[0]) // run db query
+	q.UpdateNote(note, userID) // run db query
 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(note)

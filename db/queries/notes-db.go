@@ -6,6 +6,29 @@ import (
 	"fmt"
 )
 
+// GetNote .. gets notes contents from db
+func GetNote(noteID string, userID string) m.Note {
+	var note m.Note
+	conn := db.CreateConn()
+	query := "SELECT n.title, n.id, n.body, n.date_created, n.date_edited FROM notes n JOIN note_users nu on n.id = nu.note_id WHERE nu.user_id ='" + userID + "' AND n.id='" + noteID + "'"
+
+	fmt.Println("DB: QUERY :", query)
+	rows, err := conn.Query(query)
+	db.Check(err)
+	for rows.Next() {
+		if err := rows.Scan(&note.Title, &note.ID, &note.Body,
+			&note.DateCreated, &note.DateEdited); err != nil {
+			fmt.Println("Error", err)
+		}
+	}
+	err = rows.Err()
+	db.Check(err)
+	fmt.Println("DB: Response :", note)
+
+	db.CloseConn(conn)
+	return note
+}
+
 // GetNoteTitle ...gets name of note using ID
 func GetNoteTitle(ID string) []m.FolderItem {
 
@@ -76,4 +99,16 @@ func SaveNote(note m.Note, folderID string, userID string) string {
 	}
 	tx.Commit()
 	return res
+}
+
+// UpdateNote ... updates note
+func UpdateNote(note m.Note, userID string) {
+
+	conn := db.CreateConn()
+	stmt, err := conn.Prepare("UPDATE note SET title=?, body=?, date_edited=? WHERE id=? AND user_id=?;")
+	db.Check(err)
+	_, errr := stmt.Exec(note.Title, note.Body, note.DateEdited, note.ID, userID)
+	db.Check(errr)
+	db.CloseConn(conn)
+
 }
