@@ -9,7 +9,7 @@ A Vue.Js frontend can be used to interact with the server
 
 # API EndPoints 
 ## GET
-`official client only` [/folders](#GET-folders-) <br/>
+[/folders](#GET-folders-) <br/>
 
 ## POST
 
