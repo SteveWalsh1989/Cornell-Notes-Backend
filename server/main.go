@@ -18,10 +18,10 @@ var port = ":8011" //  port number for server
 
 func main() {
 
-	db.SetupDB()              // setup db tables and add sample data
 	router := mux.NewRouter() // create router
 	ServeRoutes(router)       // handles API Route requests
 
+	db.LogTitle("Setting Up FYP Backend")
 	db.LogValue("Starting Server on port", port)
 	http.ListenAndServeTLS(port, "localhost.crt", "localhost.key", &CORSRouterDecorator{router}) // Run server
 }
