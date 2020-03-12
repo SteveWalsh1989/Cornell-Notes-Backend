@@ -1,8 +1,8 @@
 package queries
 
 import (
-	"FYP_Proto_Backend/db"
-	m "FYP_Proto_Backend/model"
+	"FYP_Backend/db"
+	m "FYP_Backend/model"
 )
 
 //GetTags ... using folder ID returns tag from

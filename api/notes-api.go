@@ -1,9 +1,9 @@
 package api
 
 import (
-	"FYP_Proto_Backend/db"
-	q "FYP_Proto_Backend/db/queries"
-	m "FYP_Proto_Backend/model"
+	"FYP_Backend/db"
+	q "FYP_Backend/db/queries"
+	m "FYP_Backend/model"
 	"time"
 
 	"encoding/json"

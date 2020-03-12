@@ -1,7 +1,7 @@
 package main
 
 import (
-	"FYP_Proto_Backend/api"
+	"FYP_Backend/api"
 
 	"github.com/gorilla/mux"
 )

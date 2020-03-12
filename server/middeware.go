@@ -1,7 +1,7 @@
 package main
 
 import (
-	"FYP_Proto_Backend/db"
+	"FYP_Backend/db"
 	"fmt"
 	"net/http"
 	"strconv"

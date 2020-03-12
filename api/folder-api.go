@@ -1,8 +1,8 @@
 package api
 
 import (
-	q "FYP_Proto_Backend/db/queries"
-	m "FYP_Proto_Backend/model"
+	q "FYP_Backend/db/queries"
+	m "FYP_Backend/model"
 	"encoding/json"
 	"fmt"
 	"math/rand"

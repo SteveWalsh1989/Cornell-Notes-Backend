@@ -1,7 +1,7 @@
 package main
 
 import (
-	"FYP_Proto_Backend/db"
+	"FYP_Backend/db"
 	"net/http"
 
 	_ "github.com/go-sql-driver/mysql"
