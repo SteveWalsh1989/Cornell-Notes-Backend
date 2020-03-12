@@ -10,11 +10,11 @@ import (
 //CheckCookie .. checks cookies and increment count value on incoming requests
 func CheckCookie(res http.ResponseWriter, req *http.Request) {
 
-	cookie, err := req.Cookie("my-cookie")
+	cookie, err := req.Cookie("cn-cookie")
 
 	if err == http.ErrNoCookie {
 		cookie = &http.Cookie{
-			Name:  "my-cookie",
+			Name:  "cn-cookie",
 			Value: "0",
 		}
 	}
@@ -27,6 +27,6 @@ func CheckCookie(res http.ResponseWriter, req *http.Request) {
 
 	http.SetCookie(res, cookie)
 
-	fmt.Println(cookie)
+	fmt.Println("// ", cookie)
 
 }

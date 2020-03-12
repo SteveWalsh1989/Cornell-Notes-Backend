@@ -37,14 +37,11 @@ func (c *CORSRouterDecorator) ServeHTTP(rw http.ResponseWriter, req *http.Reques
 		rw.Header().Set("Access-Control-Allow-Headers", "Accept, Accept-Language, Content-Type, YourOwnHeader, User_ID")
 		//rw.Header().Set("TESTINGGGGGG", "I'm here!!")
 	}
-
 	if req.Method == "OPTIONS" { // Stop here if its Preflighted OPTIONS request
 		return
 	}
-
-	CheckCookie(rw, req) // check for cookie
-
 	db.LogRequest(req.Method, req.URL.Path) // TEST: log url and request type
+	CheckCookie(rw, req)                    // check for cookie
 
 	c.R.ServeHTTP(rw, req) // Continue request
 }
