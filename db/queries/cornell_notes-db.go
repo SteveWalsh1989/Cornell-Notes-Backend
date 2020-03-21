@@ -72,7 +72,7 @@ func GetCornellNoteTags(noteID string, userID string) []m.Tag {
 	var tag m.Tag
 	conn := db.CreateConn()
 	// Build Query
-	query := "SELECT t.title, t.id, t.color " +
+	query := "SELECT t.id, t.title, t.color " +
 		"FROM users u JOIN tags t  ON u.id = t.user_id " +
 		"JOIN tag_items ti on t.id = ti.tag_id " +
 		"WHERE ti.item_id = '" + noteID + "' AND u.id = '" + userID + "'"
