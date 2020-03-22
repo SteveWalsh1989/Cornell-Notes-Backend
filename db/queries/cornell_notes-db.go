@@ -59,10 +59,41 @@ func GetCornellNoteTags(noteID string, userID string) []m.Tag {
 	return tags
 }
 
-// UpdateCornellNote ... updates a cornell note
-func UpdateCornellNote(noteID string, userID string) string {
+// UpdateCornellNote ... updates a cornell note details
+func UpdateCornellNote(cornellNoteDetails m.UpdateCornellNote, userID string) string {
 	res := ""
 
+	conn := db.CreateConn()
+	tx, err := conn.Begin()
+	db.Check(err)
+	stmt, err := tx.Prepare("UPDATE folder_items fi INNER JOIN folders f ON fi.folder_id = f.id SET fi.folder_id = ?   WHERE fi.item_id = ?;	")
+	if err != nil {
+		fmt.Println("OOps 1 preparing statement", err)
+		tx.Rollback()
+		return "Error"
+	}
+	defer stmt.Close()
+	if _, err := stmt.Exec(cornellNoteDetails.Folder.ID, cornellNoteDetails.ID); err != nil {
+		fmt.Println("OOps 1 executing statement", err)
+		tx.Rollback()
+		return "Error"
+	}
+	stmt, err = tx.Prepare("UPDATE cornell_notes cn SET cn.title = ? WHERE cn.id = ?	")
+
+	if err != nil {
+		fmt.Println("OOps 2 preparing statement", err)
+		tx.Rollback()
+		return "Error"
+	}
+	defer stmt.Close()
+	if _, err := stmt.Exec(cornellNoteDetails.Title, cornellNoteDetails.ID); err != nil {
+		fmt.Println("OOps 2 executing statement", err)
+		tx.Rollback()
+		return "Error"
+	}
+
+	tx.Commit()
+	res = "Note Updated"
 	return res
 }
 

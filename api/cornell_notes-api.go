@@ -59,15 +59,10 @@ func UpdateCornellNote(w http.ResponseWriter, r *http.Request) {
 	userID := r.Header.Get("user_id")
 	err := json.NewDecoder(r.Body).Decode(&cornellNote)
 	db.Check(err)
-	fmt.Println("UpdateCornellNote: userID", userID)
-	fmt.Println("UpdateCornellNote: noteID", cornellNote.ID)
-	fmt.Println("UpdateCornellNote: folderID", cornellNote.Folder.ID)
-
-	// fmt.Println("\n\ntesting BODY: ", cornellNote.Title)
-	// res := q.UpdateCornellNote(note[0], userID[0]) // run db query
+	res := q.UpdateCornellNote(cornellNote, userID) // run db query
 
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(cornellNote)
+	json.NewEncoder(w).Encode(res)
 }
 
 // DeleteCornellNote - deletes cornell note using id
