@@ -98,3 +98,18 @@ func UpdateCornellNoteCue(cue m.CornellCue, userID string) string {
 
 	return res
 }
+
+// DeleteCornellNoteCue ... deletes a cue from cornell ote - hard delete
+func DeleteCornellNoteCue(cue m.CornellCue, userID string) bool {
+	deleted := false
+	conn := db.CreateConn()
+
+	stmt, err := conn.Prepare("DELETE FROM cornell_cues cc WHERE EXISTS( SELECT 1 FROM cornell_users cu Where cc.cornell_note_id = cu.cornell_note_id AND cc.id = ? AND cu.user_id = ?);")
+
+	db.Check(err)
+	_, errr := stmt.Exec(cue.ID, userID)
+	db.Check(errr)
+	db.CloseConn(conn)
+	deleted = true
+	return deleted
+}
