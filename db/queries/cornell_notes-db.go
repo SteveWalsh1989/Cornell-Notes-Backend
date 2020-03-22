@@ -101,50 +101,6 @@ func UpdateCornellNote(noteID string, userID string) string {
 	return res
 }
 
-// UpdateCornellNoteCue ... updates a cornell note cue
-func UpdateCornellNoteCue(cue m.CornellCue, userID string) string {
-	fmt.Println("test date again - ", cue.DateEdited)
-	res := ""
-	conn := db.CreateConn()
-	tx, err := conn.Begin()
-	db.Check(err)
-	stmt, err := tx.Prepare("UPDATE cornell_cues cc " +
-		"JOIN sys.cornell_users cu ON cc.cornell_note_id = cu.cornell_note_id " +
-		"SET cc.cue = ?, cc.answer = ?  " +
-		"WHERE cu.user_id = ? AND cc.id = ?;")
-	if err != nil {
-		fmt.Println("OOps2", err)
-		tx.Rollback()
-		return "Error"
-	}
-	defer stmt.Close()
-	if _, err := stmt.Exec(cue.Cue, cue.Answer, userID, cue.ID); err != nil {
-		fmt.Println("OOps3", err)
-
-		tx.Rollback() // return an error too, we may want to wrap them
-		return "Error"
-	}
-	stmt, err = tx.Prepare("UPDATE cornell_notes cn JOIN cornell_users cu ON cn.id = cu.cornell_note_id " +
-		"SET cn.date_edited = ? WHERE cn.id = ? AND cu.user_id = ?")
-	if err != nil {
-		fmt.Println("OOps4", err)
-
-		tx.Rollback()
-		return "Error"
-	}
-	defer stmt.Close()
-
-	if _, err := stmt.Exec(cue.DateEdited, cue.CornellNoteID, userID); err != nil {
-		fmt.Println("OOps5", err)
-
-		tx.Rollback() // return an error too, we may want to wrap them
-		return "Error"
-	}
-	tx.Commit()
-
-	return res
-}
-
 // DeleteCornellnote ... deletes cornell note using id - soft delete so sets status to deleted
 func DeleteCornellnote(noteID string, userID string) bool {
 	fmt.Println(" -- DeleteCornellNote DB")

@@ -66,20 +66,6 @@ func UpdateCornellNote(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(cornellNote)
 }
 
-// UpdateCornellNoteCue - update cornell cue
-func UpdateCornellNoteCue(w http.ResponseWriter, r *http.Request) {
-	var cue m.CornellCue
-	// Get Cue details from body and user id from header
-	userID := r.Header.Get("user_id")
-	err := json.NewDecoder(r.Body).Decode(&cue)
-	db.Check(err)
-	// Update DB with new Cue information
-	res := q.UpdateCornellNoteCue(cue, userID) // run db query
-
-	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(res)
-}
-
 // DeleteCornellNote - deletes cornell note using id
 func DeleteCornellNote(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(" -- DeleteCornellNote API")
