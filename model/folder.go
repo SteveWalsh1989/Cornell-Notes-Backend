@@ -22,5 +22,11 @@ type FolderItem struct {
 	ItemTitle string `db:"itemTitle" json:"Item_Title"`
 }
 
+// SlimFolder : smaller folder for basic  updates
+type SlimFolder struct {
+	Title string `db:"Title" json:"Title"`
+	ID    string `db:"ID" json:"ID"`
+}
+
 // Folders : list of folders
 var Folders []Folder

@@ -17,3 +17,11 @@ type CornellNote struct {
 
 // CornellNotes : list of CornellNotes
 var CornellNotes []CornellNote
+
+type UpdateCornellNote struct {
+	ID         string     `db:"id" json:"ID"`
+	Title      string     `db:"title" json:"Title"`
+	DateEdited time.Time  `db:"date_edited" json:"DateEdited"`
+	Tags       []Tag      `db:"tags" json:"Tags"`
+	Folder     SlimFolder `db:"folder" json:"Folder"`
+}
