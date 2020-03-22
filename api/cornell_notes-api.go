@@ -82,14 +82,10 @@ func UpdateCornellNoteCue(w http.ResponseWriter, r *http.Request) {
 
 // DeleteCornellNote - deletes cornell note using id
 func DeleteCornellNote(w http.ResponseWriter, r *http.Request) {
-	ID, _ := r.URL.Query()["tagId"]
-	userID, _ := r.URL.Query()["userId"]
-
-	var tag m.Tag
-	tag.ID = ID[0]
-	tag.DateEdited = time.Now()
-	tag.Status = "Deleted"
-	deleted := q.DeleteTag(tag, userID[0])
+	fmt.Println(" -- DeleteCornellNote API")
+	noteID, _ := r.URL.Query()["note_id"]
+	userID, _ := r.URL.Query()["user_id"]
+	deleted := q.DeleteCornellnote(noteID[0], userID[0])
 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(deleted)

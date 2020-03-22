@@ -4,6 +4,7 @@ import (
 	"FYP_Backend/db"
 	m "FYP_Backend/model"
 	"fmt"
+	"time"
 )
 
 //GetCornellNoteTitle ...gets name of note using ID
@@ -142,4 +143,47 @@ func UpdateCornellNoteCue(cue m.CornellCue, userID string) string {
 	tx.Commit()
 
 	return res
+}
+
+// DeleteCornellnote ... deletes cornell note using id - soft delete so sets status to deleted
+func DeleteCornellnote(noteID string, userID string) bool {
+	fmt.Println(" -- DeleteCornellNote DB")
+	noteDeleted := false
+
+	time := time.Now() // current time for time_edited
+
+	// create transaction to update the item status for the cornell note and for folder items
+
+	conn := db.CreateConn()
+	tx, err := conn.Begin()
+	db.Check(err)
+	stmt, err := tx.Prepare("UPDATE cornell_notes cn SET cn.status = 'Deleted', cn.date_edited = ? WHERE cn.id = ?")
+	if err != nil {
+		fmt.Println("OOps preparing statement", err)
+		tx.Rollback()
+		return false
+	}
+	defer stmt.Close()
+	if _, err := stmt.Exec(time, noteID); err != nil {
+		fmt.Println("OOps executing statement", err)
+		tx.Rollback()
+		return false
+	}
+	stmt, err = tx.Prepare("UPDATE folder_items fi SET fi.status = 'Deleted' WHERE fi.item_id = ?")
+	if err != nil {
+		fmt.Println("OOps preparing statement", err)
+		tx.Rollback()
+		return false
+	}
+	defer stmt.Close()
+	if _, err := stmt.Exec(noteID); err != nil {
+		fmt.Println("OOps executing statement", err)
+		tx.Rollback()
+		return false
+	}
+
+	tx.Commit()
+	noteDeleted = true // set true if no errors are returned
+
+	return noteDeleted
 }

@@ -46,7 +46,7 @@ func GetFoldersItems(userID string) []m.FolderItem {
 		"ON (fu.folder_id = f.id) " +
 		"JOIN folder_items fi " +
 		"ON f.id = fi.folder_id " +
-		"WHERE fu.user_id = '" + userID + "'"
+		"WHERE fu.user_id = '" + userID + "' AND fi.status = 'Active'"
 	// fmt.Println("query: ", query)
 	// Run Query
 	rows, err := conn.Query(query)
