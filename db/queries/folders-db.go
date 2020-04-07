@@ -11,6 +11,44 @@ import (
 //Ctx ... context for db queries
 var Ctx context.Context
 
+//AddNewFolder ... Add new folder
+func AddNewFolder(folder m.Folder) string {
+
+	conn := db.CreateConn()
+	tx, err := conn.Begin()
+	db.Check(err)
+	stmt, err := tx.Prepare("INSERT INTO folders (id, title, date_created, date_edited) VALUES(?,?,?,?);")
+	if err != nil {
+		fmt.Println("OOps 1 preparing statement", err)
+		tx.Rollback()
+		return "Error"
+	}
+	defer stmt.Close()
+	if _, err := stmt.Exec(cornellNoteDetails.Folder.ID, cornellNoteDetails.ID); err != nil {
+		fmt.Println("OOps 1 executing statement", err)
+		tx.Rollback()
+		return "Error"
+	}
+	stmt, err = tx.Prepare("UPDATE cornell_notes cn SET cn.title = ? WHERE cn.id = ?	")
+
+	if err != nil {
+		fmt.Println("OOps 2 preparing statement", err)
+		tx.Rollback()
+		return "Error"
+	}
+	defer stmt.Close()
+	if _, err := stmt.Exec(cornellNoteDetails.Title, cornellNoteDetails.ID); err != nil {
+		fmt.Println("OOps 2 executing statement", err)
+		tx.Rollback()
+		return "Error"
+	}
+
+	res := "Folder Added"
+
+	return res
+
+}
+
 //GetFolder ... using folder ID returns folder from db as Folder struct
 func GetFolder(id string) m.Folder {
 	conn := db.CreateConn()

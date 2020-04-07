@@ -18,7 +18,6 @@ func CheckCookie(res http.ResponseWriter, req *http.Request) {
 			Value: "0",
 		}
 	}
-
 	count, err := strconv.Atoi(cookie.Value)
 	db.Check(err)
 

@@ -82,6 +82,7 @@ func CreateFolder(w http.ResponseWriter, r *http.Request) {
 
 	folder.ID = strconv.Itoa(rand.Intn(1000000))
 	//folder.Name = r.Body.
+
 	m.Folders = append(m.Folders, folder)
 	json.NewEncoder(w).Encode(&folder)
 }
