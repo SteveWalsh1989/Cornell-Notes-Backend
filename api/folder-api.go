@@ -5,9 +5,8 @@ import (
 	m "FYP_Backend/model"
 	"encoding/json"
 	"fmt"
-	"math/rand"
 	"net/http"
-	"strconv"
+	"time"
 
 	"github.com/gorilla/mux"
 )
@@ -76,15 +75,18 @@ func GetFolder(w http.ResponseWriter, r *http.Request) {
 
 // CreateFolder : creates and returns folder
 func CreateFolder(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("\nCreateFolder API")
+	userID := r.Header.Get("user_id")
 
 	var folder m.Folder
-	_ = json.NewDecoder(r.Body).Decode(folder)
+	folder.DateCreated = time.Now()
+	folder.DateEdited = time.Now()
+	_ = json.NewDecoder(r.Body).Decode(&folder)
 
-	folder.ID = strconv.Itoa(rand.Intn(1000000))
-	//folder.Name = r.Body.
+	res := q.AddNewFolder(folder, userID)
+	fmt.Println("\nCreateFolder response", res)
 
-	m.Folders = append(m.Folders, folder)
-	json.NewEncoder(w).Encode(&folder)
+	json.NewEncoder(w).Encode(res)
 }
 
 // UpdateFolderName : creates and returns folder

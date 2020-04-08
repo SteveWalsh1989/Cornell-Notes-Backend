@@ -13,6 +13,7 @@ var Ctx context.Context
 
 //AddNewFolder ... Add new folder
 func AddNewFolder(folder m.Folder, userID string) m.Folder {
+	fmt.Println("\n AddNewFolder DB")
 
 	conn := db.CreateConn()
 
