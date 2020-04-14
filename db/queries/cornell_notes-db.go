@@ -84,6 +84,20 @@ func GetCornellNoteSummary(cornellNoteID string, userID string) string {
 
 }
 
+//UpdateCornellNoteSummary ...update summary for cornell note
+func UpdateCornellNoteSummary(cornellNote m.CornellNote, userID string) string {
+	fmt.Println("-- UpdateCornellNoteSummary: ")
+
+	conn := db.CreateConn()
+	stmt, err := conn.Prepare("UPDATE cornell_notes cn JOIN cornell_users cnu ON cn.id = cnu.cornell_note_id SET cn.summary = ?, cn.date_edited = ? WHERE cn.id = ? and cnu.user_id = ?")
+	db.Check(err)
+	_, errr := stmt.Exec(cornellNote.Summary, cornellNote.DateEdited, cornellNote.ID, userID)
+	db.Check(errr)
+	db.CloseConn(conn)
+	return "Updated"
+
+}
+
 //GetCornellNoteTitle ...gets name of note using ID
 func GetCornellNoteTitle(ID string) []m.FolderItem {
 	conn := db.CreateConn()

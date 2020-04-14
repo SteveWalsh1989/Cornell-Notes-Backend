@@ -64,6 +64,22 @@ func UpdateCornellNote(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(res)
 }
 
+//UpdateCornellNoteSummary ... update summary for cornell note
+func UpdateCornellNoteSummary(w http.ResponseWriter, r *http.Request) {
+	var cornellNote m.CornellNote
+
+	userID := r.Header.Get("user_id")
+	err := json.NewDecoder(r.Body).Decode(&cornellNote)
+	db.Check(err)
+	// DB query
+	cornellNote.DateEdited = time.Now()
+
+	res := q.UpdateCornellNoteSummary(cornellNote, userID) // run db query
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(res)
+}
+
 // DeleteCornellNote - deletes cornell note using id
 func DeleteCornellNote(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(" -- DeleteCornellNote API")
