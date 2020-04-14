@@ -8,6 +8,7 @@ import (
 type CornellNote struct {
 	ID          string       `db:"id" json:"ID"`
 	Title       string       `db:"title" json:"Title"`
+	Summary     string       `db:"summary" json:"Summary"`
 	Status      string       `db:"status" json:"Status"`
 	DateCreated time.Time    `db:"date_created" json:"DateCreated"`
 	DateEdited  time.Time    `db:"date_edited" json:"DateEdited"`
@@ -18,6 +19,7 @@ type CornellNote struct {
 // CornellNotes : list of CornellNotes
 var CornellNotes []CornellNote
 
+// UpdateCornellNote : updating part of note
 type UpdateCornellNote struct {
 	ID         string     `db:"id" json:"ID"`
 	Title      string     `db:"title" json:"Title"`

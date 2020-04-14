@@ -59,6 +59,31 @@ func CreateCornellNote(cornellNote m.CornellNote, userID string, folderID string
 	return "Note Added"
 }
 
+//GetCornellNoteSummary ... gets summary of note using ID
+func GetCornellNoteSummary(cornellNoteID string, userID string) string {
+
+	conn := db.CreateConn()
+	summary := ""
+	query := "SELECT cn.summary FROM cornell_notes cn JOIN cornell_users cnu ON cn.id = cnu.cornell_note_id " +
+		"WHERE cnu.user_id = '" + userID + "' AND cn.ID = '" + cornellNoteID + "'"
+	// Run Query
+	rows, err := conn.Query(query)
+	db.Check(err)
+	// Assemble Results
+	for rows.Next() {
+		if err := rows.Scan(&summary); err != nil {
+			fmt.Println("Error: ", err)
+		}
+	}
+	err = rows.Err()
+	db.Check(err)
+	db.CloseConn(conn)
+
+	// Return Results
+	return summary
+
+}
+
 //GetCornellNoteTitle ...gets name of note using ID
 func GetCornellNoteTitle(ID string) []m.FolderItem {
 	conn := db.CreateConn()
