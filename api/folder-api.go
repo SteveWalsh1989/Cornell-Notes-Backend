@@ -75,7 +75,6 @@ func GetFolder(w http.ResponseWriter, r *http.Request) {
 
 // CreateFolder : creates and returns folder
 func CreateFolder(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("\nCreateFolder API")
 	userID := r.Header.Get("user_id")
 
 	var folder m.Folder
@@ -84,7 +83,6 @@ func CreateFolder(w http.ResponseWriter, r *http.Request) {
 	_ = json.NewDecoder(r.Body).Decode(&folder)
 
 	res := q.AddNewFolder(folder, userID)
-	fmt.Println("\nCreateFolder response", res)
 
 	json.NewEncoder(w).Encode(res)
 }

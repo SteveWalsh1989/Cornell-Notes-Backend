@@ -7,6 +7,58 @@ import (
 	"time"
 )
 
+//CreateCornellNote ... creates new cornell note for a user
+func CreateCornellNote(cornellNote m.CornellNote, userID string, folderID string) string {
+	fmt.Println(" -- CreateCornellNote DB")
+
+	conn := db.CreateConn()
+	tx, err := conn.Begin()
+	db.Check(err)
+	// 1: update cornell_note
+	stmt, err := tx.Prepare("INSERT INTO cornell_notes (id, title, date_created, date_edited) VALUES(?,?,?,?);")
+	if err != nil {
+		fmt.Println("OOps - CreateCornellNote-  preparing statement 1 ", err)
+		tx.Rollback()
+		return "Error"
+	}
+	defer stmt.Close()
+	if _, err := stmt.Exec(cornellNote.ID, cornellNote.Title, cornellNote.DateCreated, cornellNote.DateEdited); err != nil {
+		fmt.Println("OOps - CreateCornellNote-  executing statement 1 ", err)
+		tx.Rollback()
+		return "Error"
+	}
+	// 2 : update cornell_users
+	stmt, err = tx.Prepare("INSERT INTO cornell_users (cornell_note_id, user_id) VALUES(?,?);")
+	if err != nil {
+		fmt.Println("OOps - CreateCornellNote-  preparing statement 2 ", err)
+		tx.Rollback()
+		return "Error"
+	}
+	defer stmt.Close()
+	if _, err := stmt.Exec(cornellNote.ID, userID); err != nil {
+		fmt.Println("OOps - CreateCornellNote-  executing statement 2 ", err)
+		tx.Rollback()
+		return "Error"
+	}
+	// 3 : update folder_items
+	stmt, err = tx.Prepare("INSERT INTO folder_items (folder_id, item_id, item_type) VALUES(?,?,?);")
+	if err != nil {
+		fmt.Println("OOps - CreateCornellNote-  preparing statement 3 ", err)
+		tx.Rollback()
+		return "Error"
+	}
+	defer stmt.Close()
+	if _, err := stmt.Exec(folderID, cornellNote.ID, "CornellNote"); err != nil {
+		fmt.Println("OOps - CreateCornellNote-  executing statement 3 ", err)
+		tx.Rollback()
+		return "Error"
+	}
+
+	tx.Commit()
+
+	return "Note Added"
+}
+
 //GetCornellNoteTitle ...gets name of note using ID
 func GetCornellNoteTitle(ID string) []m.FolderItem {
 	conn := db.CreateConn()
