@@ -19,7 +19,7 @@ func GetBadges() []m.Badge {
 	rows, err := conn.Query(query)
 	db.Check(err)
 	for rows.Next() {
-		if err := rows.Scan(&badge.ID, &badge.Title, &badge.Requirement); err != nil {
+		if err := rows.Scan(&badge.ID, &badge.Title, &badge.Requirement, &badge.Icon); err != nil {
 			fmt.Println("Error", err)
 		}
 		badges = append(badges, badge)
@@ -27,7 +27,6 @@ func GetBadges() []m.Badge {
 	err = rows.Err()
 	db.Check(err)
 	db.CloseConn(conn)
-	fmt.Println("badges", badges)
 
 	return badges
 

@@ -61,6 +61,61 @@ func GetFolders(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(folders)
 }
 
+// GetFolderItemByTag : returns all folders that contain items with a tag
+func GetFolderItemByTag(w http.ResponseWriter, r *http.Request) {
+	var folders []m.Folder
+	var folderItem m.FolderItem
+	var folderItems []m.FolderItem
+	var itemNames []m.FolderItem
+	params := mux.Vars(r)
+	tagID := params["id"]
+	userID := r.Header.Get("user_id")
+	fmt.Println("Reached")
+	fmt.Println("TAG ID: ", tagID)
+	// Get folders itemIDs and item_types
+	folderItems = q.GetFoldersItems(userID)
+
+	//fmt.Println("GetFolders: About to call q.GetNoteTitle") // testing
+	itemNames = append(itemNames, q.GetNoteTitle(userID)...)
+	itemNames = append(itemNames, q.GetCornellNoteTitle(userID)...)
+	// Appends the item name to overall folder item
+	for i, item := range folderItems {
+		for _, name := range itemNames {
+			if item.ItemID == name.ID {
+				folderItems[i].ItemTitle = name.Title // add name to folder item
+			}
+		}
+	}
+	for _, item := range folderItems {
+		exists := false
+		for i, folder := range folders {
+			if folder.ID == item.ID {
+				exists = true // add to existing folder
+				folderItem.Title = item.Title
+				folderItem.ID = item.ID
+				folderItem.ItemTitle = item.ItemTitle
+				folderItem.ItemID = item.ItemID
+				folderItem.ItemType = item.ItemType
+				folders[i].Items = append(folders[i].Items, folderItem)
+			}
+		}
+		if !exists { // create new folder folder
+			var newfolder m.Folder
+			folderItem.Title = item.Title
+			folderItem.ID = item.ID
+			newfolder.ID = item.ID
+			newfolder.Title = item.Title
+			folderItem.ItemTitle = item.ItemTitle
+			folderItem.ItemID = item.ItemID
+			folderItem.ItemType = item.ItemType
+			newfolder.Items = append(newfolder.Items, folderItem)
+			folders = append(folders, newfolder)
+		}
+	}
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(folders)
+}
+
 // GetFolder : returns folder by id
 func GetFolder(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)

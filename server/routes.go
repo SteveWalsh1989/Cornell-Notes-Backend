@@ -19,6 +19,7 @@ func ServeRoutes(router *mux.Router) {
 	 * FOLDERS
 	 */
 	router.HandleFunc("/folders", api.GetFolders).Methods("GET", "OPTIONS")
+	router.HandleFunc("/folder/tag/{id}", api.GetFolderItemByTag).Methods("GET", "OPTIONS")
 	router.HandleFunc("/folder", api.CreateFolder).Methods("POST", "OPTIONS")
 	router.HandleFunc("/folder", api.UpdateFolderName).Methods("PUT", "OPTIONS")
 	router.HandleFunc("/folders/", api.GetFolders).Methods("GET", "OPTIONS")
