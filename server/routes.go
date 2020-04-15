@@ -55,6 +55,7 @@ func ServeRoutes(router *mux.Router) {
 	/*
 	 * Badges & Scores
 	 */
+	router.HandleFunc("/badges", api.GetBadges).Methods("GET", "OPTIONS")
 	router.HandleFunc("/badges/stats", api.GetUserStats).Methods("GET", "OPTIONS")
 	router.HandleFunc("/badges/stats", api.UpdateUserStats).Methods("PUT", "OPTIONS")
 
