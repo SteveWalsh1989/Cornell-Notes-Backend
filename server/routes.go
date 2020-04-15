@@ -51,4 +51,11 @@ func ServeRoutes(router *mux.Router) {
 	router.HandleFunc("/note", api.SaveNote).Methods("POST", "OPTIONS")
 	router.HandleFunc("/note", api.UpdateNote).Methods("PUT", "OPTIONS")
 	router.HandleFunc("/note", api.DeleteNote).Methods("DELETE", "OPTIONS")
+
+	/*
+	 * Badges & Scores
+	 */
+	router.HandleFunc("/badges/stats", api.GetUserStats).Methods("GET", "OPTIONS")
+	router.HandleFunc("/badges/stats", api.UpdateUserStats).Methods("PUT", "OPTIONS")
+
 }

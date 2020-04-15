@@ -1,8 +1,6 @@
 package models
 
-import (
-	"time"
-)
+import "time"
 
 // Badge : Sample struct for Badge to test router
 type Badge struct {

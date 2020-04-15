@@ -104,7 +104,7 @@ func SaveNote(note m.Note, folderID string, userID string) string {
 func UpdateNote(note m.Note, userID string) {
 
 	conn := db.CreateConn()
-	stmt, err := conn.Prepare("UPDATE notes SET title=?, body=?, date_edited=? WHERE id=? AND user_id=?;")
+	stmt, err := conn.Prepare("UPDATE notes n JOIN note_users nu ON n.id = nu.user_id SET n.title=?, n.body=?, n.date_edited=? WHERE n.id=? AND nu.user_id=?;")
 	db.Check(err)
 	_, errr := stmt.Exec(note.Title, note.Body, note.DateEdited, note.ID, userID)
 	db.Check(errr)
