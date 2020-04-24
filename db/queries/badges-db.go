@@ -55,3 +55,43 @@ func GetUserStats(userID string) m.UserStats {
 	return userStats
 
 }
+
+// UpdateUserStatsAddCornellNote ... updates stats per userID
+func UpdateUserStatsAddCornellNote(points int, userID string) string {
+
+	conn := db.CreateConn()
+	stmt, err := conn.Prepare("UPDATE user_scores SET cornell_notes_created = cornell_notes_created + 1 , points = points + ?, WHERE user_id=?;")
+	db.Check(err)
+	_, errr := stmt.Exec(points, userID)
+	db.Check(errr)
+	db.CloseConn(conn)
+
+	return "Updated Score"
+
+}
+
+// UpdateUserStatsAddNote ... updates stats per userID
+func UpdateUserStatsAddNote(points int, userID string) string {
+
+	conn := db.CreateConn()
+	stmt, err := conn.Prepare("UPDATE user_scores SET notes_created = notes_created + 1 , points = points + ?, WHERE user_id=?;")
+	db.Check(err)
+	_, errr := stmt.Exec(points, userID)
+	db.Check(errr)
+	db.CloseConn(conn)
+
+	return "Updated Score"
+
+}
+
+// UpdateUserStatsCompleteReview ... updates stats per userID
+func UpdateUserStatsCompleteReview(points int, userID string) string {
+	conn := db.CreateConn()
+	stmt, err := conn.Prepare("UPDATE user_scores SET reviews_completed  = reviews_completed + 1 , points = points + ?, WHERE user_id=?;")
+	db.Check(err)
+	_, errr := stmt.Exec(points, userID)
+	db.Check(errr)
+	db.CloseConn(conn)
+
+	return "Updated Score"
+}

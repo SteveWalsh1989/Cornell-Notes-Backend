@@ -1,7 +1,10 @@
 package api
 
 import (
+	"FYP_Backend/db"
 	q "FYP_Backend/db/queries"
+	m "FYP_Backend/model"
+
 	"encoding/json"
 	"net/http"
 )
@@ -28,9 +31,29 @@ func GetUserStats(w http.ResponseWriter, r *http.Request) {
 
 // UpdateUserStats ... updates user stats
 func UpdateUserStats(w http.ResponseWriter, r *http.Request) {
+	var reward m.Reward
+	userID := r.Header.Get("user_id")
 
-	// userID := r.Header.Get("user_id")
+	err := json.NewDecoder(r.Body).Decode(&reward)
+	db.Check(err)
+	res := "Error: Update Score Failed"
+	switch reward.RewardType {
+	case "addCornellNote":
+		res = q.UpdateUserStatsAddCornellNote(reward.Score, userID)
 
-	// w.Header().Set("Content-Type", "application/json")
-	// json.NewEncoder(w).Encode(folders)
+	case "addNote":
+		res = q.UpdateUserStatsAddNote(reward.Score, userID)
+
+	case "completedReview":
+		res = q.UpdateUserStatsCompleteReview(reward.Score, userID)
+
+	case "shareNote":
+
+	case "shareCornellNote":
+	default:
+
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(res)
 }
