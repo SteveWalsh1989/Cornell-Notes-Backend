@@ -44,8 +44,11 @@ func UpdateUserStats(w http.ResponseWriter, r *http.Request) {
 	case "addNote":
 		res = q.UpdateUserStatsAddNote(reward.Score, userID)
 
+	case "addCue":
+		res = q.UpdateUserStatsAddNote(reward.Score, userID)
+
 	case "completedReview":
-		res = q.UpdateUserStatsCompleteReview(reward.Score, userID)
+		res = q.UpdateUserStatsCompleteReview(reward.Score, reward.Added, userID)
 
 	case "shareNote":
 

@@ -8,7 +8,6 @@ import (
 
 // GetBadges .. gets all badges
 func GetBadges() []m.Badge {
-	fmt.Println("Reached db query")
 
 	var badge m.Badge
 	var badges []m.Badge
@@ -72,6 +71,22 @@ func UpdateUserStatsAddCornellNote(points int, userID string) string {
 
 }
 
+// UpdateUserStatsAddCornellCue ... updates stats per userID
+func UpdateUserStatsAddCornellCue(points int, userID string) string {
+
+	conn := db.CreateConn()
+
+	stmt, err := conn.Prepare("UPDATE user_scores us SET us.cues_created = us.cues_created + 1 , us.points = us.points + ? WHERE us.user_id= ?;")
+
+	db.Check(err)
+	_, errr := stmt.Exec(points, userID)
+	db.Check(errr)
+	db.CloseConn(conn)
+
+	return "Updated Score"
+
+}
+
 // UpdateUserStatsAddNote ... updates stats per userID
 func UpdateUserStatsAddNote(points int, userID string) string {
 
@@ -88,14 +103,14 @@ func UpdateUserStatsAddNote(points int, userID string) string {
 }
 
 // UpdateUserStatsCompleteReview ... updates stats per userID
-func UpdateUserStatsCompleteReview(points int, userID string) string {
+func UpdateUserStatsCompleteReview(points int, added int, userID string) string {
 	conn := db.CreateConn()
-	stmt, err := conn.Prepare("UPDATE user_scores us SET us.reviews_completed  = us.reviews_completed + 1 , us.points = points + ? WHERE us.user_id= ?;")
+	stmt, err := conn.Prepare("UPDATE user_scores us SET us.reviews_completed  = us.reviews_completed + 1 ,us.cues_reviewed = us.cues_reviewed + ?, us.points = points + ? WHERE us.user_id= ?;")
 
 	fmt.Println("Statement:", stmt)
 
 	db.Check(err)
-	_, errr := stmt.Exec(points, userID)
+	_, errr := stmt.Exec(added, points, userID)
 	db.Check(errr)
 	db.CloseConn(conn)
 

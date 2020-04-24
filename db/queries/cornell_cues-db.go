@@ -44,7 +44,6 @@ func GetCornellNoteCues(noteID string, userID string) m.CornellNote {
 
 // AddCornellNoteCue ... adds a new a cornell note cue
 func AddCornellNoteCue(cue m.CornellCue, userID string) m.CornellCue {
-	fmt.Println("-- AddCornellNoteCue: ", cue)
 	conn := db.CreateConn()
 	stmt, err := conn.Prepare("INSERT INTO cornell_cues (id, cornell_note_id, cue_order, cue, answer) VALUES(?,?,?,?,?);")
 	db.Check(err)
