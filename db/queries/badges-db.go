@@ -60,7 +60,9 @@ func GetUserStats(userID string) m.UserStats {
 func UpdateUserStatsAddCornellNote(points int, userID string) string {
 
 	conn := db.CreateConn()
-	stmt, err := conn.Prepare("UPDATE user_scores SET cornell_notes_created = cornell_notes_created + 1 , points = points + ?, WHERE user_id=?;")
+
+	stmt, err := conn.Prepare("UPDATE user_scores us SET us.cornell_notes_created = us.cornell_notes_created + 1 , us.points = us.points + ? WHERE us.user_id= ?;")
+
 	db.Check(err)
 	_, errr := stmt.Exec(points, userID)
 	db.Check(errr)
@@ -74,7 +76,8 @@ func UpdateUserStatsAddCornellNote(points int, userID string) string {
 func UpdateUserStatsAddNote(points int, userID string) string {
 
 	conn := db.CreateConn()
-	stmt, err := conn.Prepare("UPDATE user_scores SET notes_created = notes_created + 1 , points = points + ?, WHERE user_id=?;")
+	stmt, err := conn.Prepare("UPDATE user_scores us SET us.notes_created = us.notes_created + 1 , us.points = us.points + ? WHERE us.user_id= ?;")
+
 	db.Check(err)
 	_, errr := stmt.Exec(points, userID)
 	db.Check(errr)
@@ -87,7 +90,10 @@ func UpdateUserStatsAddNote(points int, userID string) string {
 // UpdateUserStatsCompleteReview ... updates stats per userID
 func UpdateUserStatsCompleteReview(points int, userID string) string {
 	conn := db.CreateConn()
-	stmt, err := conn.Prepare("UPDATE user_scores SET reviews_completed  = reviews_completed + 1 , points = points + ?, WHERE user_id=?;")
+	stmt, err := conn.Prepare("UPDATE user_scores us SET us.reviews_completed  = us.reviews_completed + 1 , us.points = points + ? WHERE us.user_id= ?;")
+
+	fmt.Println("Statement:", stmt)
+
 	db.Check(err)
 	_, errr := stmt.Exec(points, userID)
 	db.Check(errr)
