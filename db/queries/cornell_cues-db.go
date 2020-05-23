@@ -66,13 +66,13 @@ func UpdateCornellNoteCue(cue m.CornellCue, userID string) string {
 		"SET cc.cue = ?, cc.answer = ?  " +
 		"WHERE cu.user_id = ? AND cc.id = ?;")
 	if err != nil {
-		fmt.Println("OOps2", err)
+		fmt.Println("UpdateCornellNoteCue Error 1", err)
 		tx.Rollback()
 		return "Error"
 	}
 	defer stmt.Close()
 	if _, err := stmt.Exec(cue.Cue, cue.Answer, userID, cue.ID); err != nil {
-		fmt.Println("OOps3", err)
+		fmt.Println("UpdateCornellNoteCue Error 2", err)
 
 		tx.Rollback() // return an error too, we may want to wrap them
 		return "Error"
@@ -80,7 +80,7 @@ func UpdateCornellNoteCue(cue m.CornellCue, userID string) string {
 	stmt, err = tx.Prepare("UPDATE cornell_notes cn JOIN cornell_users cu ON cn.id = cu.cornell_note_id " +
 		"SET cn.date_edited = ? WHERE cn.id = ? AND cu.user_id = ?")
 	if err != nil {
-		fmt.Println("OOps4", err)
+		fmt.Println("UpdateCornellNoteCue Error 3", err)
 
 		tx.Rollback()
 		return "Error"
@@ -88,7 +88,7 @@ func UpdateCornellNoteCue(cue m.CornellCue, userID string) string {
 	defer stmt.Close()
 
 	if _, err := stmt.Exec(cue.DateEdited, cue.CornellNoteID, userID); err != nil {
-		fmt.Println("OOps5", err)
+		fmt.Println("UpdateCornellNoteCue Error 4", err)
 
 		tx.Rollback() // return an error too, we may want to wrap them
 		return "Error"

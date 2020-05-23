@@ -60,4 +60,11 @@ func ServeRoutes(router *mux.Router) {
 	router.HandleFunc("/badges/stats", api.GetUserStats).Methods("GET", "OPTIONS")
 	router.HandleFunc("/badges/reward", api.UpdateUserStats).Methods("PUT", "OPTIONS")
 
+	/*
+	 * Friends
+	 */
+	router.HandleFunc("/friends", api.GetFriendsList).Methods("GET", "OPTIONS")
+	router.HandleFunc("/friends", api.AddFriend).Methods("POST", "OPTIONS")
+	router.HandleFunc("/friends", api.DeleteFriend).Methods("DELETE", "OPTIONS")
+
 }
