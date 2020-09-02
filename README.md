@@ -4,25 +4,7 @@ This program serves as the backend for my final year project: 'Cornell Notes: A 
 ## Features
 It uses Gorilla/mux for its server
 It uses sql to connect to a server running on my local machine
-A Vue.Js frontend can be used to interact with the server
+A Vue.Js frontend is currently used to interact with the server
 
-
-# API EndPoints 
-## GET
-[/folders](#GET-folders-) <br/>
-
-## POST
-
-___
-
-
-
-
-### GET /folders/
-Gets basic folder information for user 
-
-**Parameters**
-
-|          Name | Required |  Type   | Description                                                                                                                                                           |
-| -------------:|:--------:|:-------:| -------------------------------------------------------------------------------------------------------------------------------------------------------|
-|     `user_id` | required | string  | the user id for the user     |
+## Additional Information
+Cornell_Notes.pdf contains all information about projects background research, planning and implementation
