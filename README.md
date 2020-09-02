@@ -1,6 +1,8 @@
 # FYP_Backend
 This program serves as the backend for my final year project: 'Cornell Notes: A student Focused Note Taking Appliation'
 
+Grade Recieved was 82% for the project research phase and 92% for the implementation phase
+
 ## Features
 It uses Gorilla/mux for its server
 It uses sql to connect to a server running on my local machine
