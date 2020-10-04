@@ -3,6 +3,12 @@ This program serves as the backend for my final year project: 'Cornell Notes: A 
 
 Grade Recieved was 82% for the project research phase and 92% for the implementation phase
 
+
+![Cornell Notes demo](cn-demo.gif)
+
+
+
+
 ## Features
 It uses Gorilla/mux for its server
 It uses sql to connect to a server running on my local machine
